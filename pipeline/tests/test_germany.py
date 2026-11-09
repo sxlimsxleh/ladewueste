@@ -3,7 +3,11 @@
 import numpy as np
 import pytest
 
-from pipeline.germany import distance_to_border_km, points_in_germany
+from pipeline.germany import (
+    classify_coordinates,
+    distance_to_border_km,
+    points_in_germany,
+)
 
 # A 1°x1° square with a 0.2° square hole, as (lon, lat) rings like GeoJSON.
 SQUARE = np.array([[10.0, 50.0], [11.0, 50.0], [11.0, 51.0], [10.0, 51.0], [10.0, 50.0]])
@@ -26,3 +30,14 @@ def test_real_boundary_known_cities() -> None:
     lat = np.array([52.520, 48.137, 48.857, 48.208, 52.370])
     lon = np.array([13.405, 11.576, 2.352, 16.373, 4.895])
     assert points_in_germany(lat, lon).tolist() == [True, True, False, False, False]
+
+
+def test_classify_coordinates_r09() -> None:
+    # The toy square spans lat 50-51, lon 10-11. Swapping (10.5, 50.5) lands inside it.
+    lat = np.array([50.5, 10.5, 51.005, 52.0, 0.0, np.nan])
+    lon = np.array([10.2, 50.5, 10.5, 10.5, 10.5, 10.5])
+    fixed_lat, fixed_lon, status, border_km = classify_coordinates(lat, lon, tolerance_km=2, rings=[SQUARE])
+    assert status.tolist() == ["inside", "swapped", "border_tolerance", "outside", "missing", "missing"]
+    assert (fixed_lat[1], fixed_lon[1]) == (50.5, 10.5)  # swapped back
+    assert border_km[2] == pytest.approx(0.56, abs=0.05)
+    assert np.isnan(border_km[0])

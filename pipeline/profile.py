@@ -16,6 +16,7 @@ from sklearn.neighbors import BallTree
 
 from pipeline.config import DOCS_DIR, DUCKDB_PATH, RAW_DIR, load_config
 from pipeline.germany import distance_to_border_km, load_rings, points_in_germany
+from pipeline.operators import legal_key, surface_key
 
 EARTH_RADIUS_KM = 6371.0088
 LAT = '"Breitengrad"'
@@ -220,26 +221,6 @@ def check_plugs(con, n_groups: int) -> list[Finding]:
 # ---------------------------------------------------------------- operators
 
 
-LEGAL_SUFFIX = re.compile(
-    r"\b(gmbh\s*&\s*co\.?\s*kg|ag\s*(&|und)\s*co\.?\s*kg|ug\s*\(haftungsbeschränkt\)|gmbh|mbh|ag|se|kg|ug|ohg|e\.?\s?k\.?|eg|kgaa|b\.?v\.?)\.?\s*$"
-)
-
-
-def surface_key(name: str) -> str:
-    """Case, whitespace (incl. non-breaking space) and punctuation-insensitive key. Safe merge."""
-    s = name.replace("\xa0", " ").lower()
-    s = re.sub(r"[.,]", "", s)
-    return re.sub(r"\s+", " ", s).strip()
-
-
-def legal_key(name: str) -> str:
-    """surface_key with a trailing legal form removed. NOT always safe: 'X GmbH' and 'X e.K.' can be different companies."""
-    s = name.replace("\xa0", " ").lower()
-    s = re.sub(r"\s+", " ", s).strip()
-    s = LEGAL_SUFFIX.sub("", s)
-    return surface_key(s)
-
-
 def check_operators(con) -> list[Finding]:
     operators = con.execute('SELECT "Betreiber", count(*) FROM bronze.raw_rows GROUP BY 1').fetchall()
     null_ops = sum(n for name, n in operators if name is None)
@@ -258,8 +239,8 @@ def check_operators(con) -> list[Finding]:
     legal_only = {k: v for k, v in legal.items() if len({surface_key(name) for name, _ in v}) > 1}
 
     def show(groups: dict, k: int) -> list[str]:
-        ranked = sorted(groups.values(), key=lambda v: -sum(n for _, n in v))[:k]
-        return [" ⟷ ".join(f"`{name}` ({n})" for name, n in group) for group in ranked]
+        ranked = sorted(groups.values(), key=lambda v: (-sum(n for _, n in v), min(name for name, _ in v)))[:k]
+        return [" ⟷ ".join(f"`{name}` ({n})" for name, n in sorted(group, key=lambda x: (-x[1], x[0]))) for group in ranked]
 
     return [
         Finding(
@@ -271,7 +252,8 @@ def check_operators(con) -> list[Finding]:
         Finding(
             "O02", "Operator variants: case / whitespace / punctuation", sum(n for v in surface.values() for _, n in v),
             f"{len(names):,} distinct raw operator strings. {len(surface)} groups of spellings become identical "
-            f"after lower-casing, collapsing whitespace and removing `.`/`,`. Safe to merge.",
+            "after ignoring case, whitespace, `.`/`,`/apostrophes, hyphen vs space, `&` spacing and ß vs ss "
+            "(pipeline/operators.py surface_key). Safe to merge.",
             show(surface, 5),
         ),
         Finding(

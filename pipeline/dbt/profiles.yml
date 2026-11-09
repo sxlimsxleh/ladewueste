@@ -1,0 +1,8 @@
+ladewueste:
+  target: local
+  outputs:
+    local:
+      type: duckdb
+      # run_dbt.py sets LADEWUESTE_DUCKDB to the absolute path from pipeline/config.py.
+      path: "{{ env_var('LADEWUESTE_DUCKDB') }}"
+      threads: 4

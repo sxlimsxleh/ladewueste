@@ -1,0 +1,8 @@
+version: 2
+sources:
+  - name: bronze
+    description: "Written by pipeline/load_bronze.py: every raw record as text, original German column names."
+    schema: bronze
+    tables:
+      - name: raw_rows
+      - name: load_info

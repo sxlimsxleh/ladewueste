@@ -1,0 +1,35 @@
+name: ladewueste
+version: "0.2.0"
+config-version: 2
+profile: ladewueste
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+# Every value below is injected from config.yaml by pipeline/run_dbt.py (`--vars`).
+# The defaults only exist so `dbt parse` works on its own; run_dbt.py always overrides them.
+vars:
+  n_point_groups: 6
+  hpc_threshold_kw: 150
+  max_plausible_point_kw: 1500
+  border_tolerance_km: 2
+  placeholder_min_towns: 4
+  low_precision_decimals: 2
+  operator_fuzzy_threshold: 96
+
+models:
+  ladewueste:
+    staging:
+      +schema: staging
+      +materialized: view
+    silver:
+      +schema: silver
+      +materialized: table
+
+seeds:
+  ladewueste:
+    +schema: ref

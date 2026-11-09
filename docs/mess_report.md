@@ -26,8 +26,8 @@ Counts are records (rows) unless stated otherwise.
 | P01 | Implausible power (0 kW or > 1500 kW) | 1 |
 | P02 | Station power below its strongest plug | 169 |
 | O01 | Operator names with stray whitespace | 6,401 |
-| O02 | Operator variants: case / whitespace / punctuation | 876 |
-| O03 | Operator variants: differ only by legal form | 233 |
+| O02 | Operator variants: case / whitespace / punctuation | 917 |
+| O03 | Operator variants: differ only by legal form | 266 |
 | C01 | Missing or zero coordinates | 0 |
 | C02 | Coordinates outside Germany | 771 |
 | C03 | Swapped latitude/longitude | 0 |
@@ -37,7 +37,7 @@ Counts are records (rows) unless stated otherwise.
 | D02 | Same EVSE-ID on several records | 1,046 |
 | D03 | Exact duplicates except ID | 14,420 |
 | D05 | EVSE-ID cells that are not EVSE-IDs | 3,748 |
-| D04 | Same operator within 20 m | 70,413 |
+| D04 | Same operator within 20 m | 70,415 |
 | X01 | Status values | 0 |
 | X02 | Charging type by register | 0 |
 | X03 | Commissioning dates | 0 |
@@ -161,30 +161,30 @@ Examples:
 
 ## O02 · Operator variants: case / whitespace / punctuation
 
-**Affected: 876**
+**Affected: 917**
 
-11,755 distinct raw operator strings. 30 groups of spellings become identical after lower-casing, collapsing whitespace and removing `.`/`,`. Safe to merge.
+11,755 distinct raw operator strings. 44 groups of spellings become identical after ignoring case, whitespace, `.`/`,`/apostrophes, hyphen vs space, `&` spacing and ß vs ss (pipeline/operators.py surface_key). Safe to merge.
 
 Examples:
 
 - `CUBOS Service GmbH` (485) ⟷ `Cubos Service GmbH` (1)
 - `nonoxx pro GmbH` (153) ⟷ `Nonoxx Pro GmbH` (2)
-- `Orange  Charging B.V.` (42) ⟷ `Orange Charging B.V.` (78)
-- `KreuterMedeleSchäfer GmbH & Co. KG` (6) ⟷ `KreuterMedeleSchäfer GmbH & Co. KG.` (13)
-- `Auto Weber GmbH & Co. KG` (1) ⟷ `Auto Weber Gmbh & Co KG` (10)
+- `Orange Charging B.V.` (78) ⟷ `Orange  Charging B.V.` (42)
+- `KreuterMedeleSchäfer GmbH & Co. KG.` (13) ⟷ `KreuterMedeleSchäfer GmbH & Co. KG` (6)
+- `Auto Weber Gmbh & Co KG` (10) ⟷ `Auto Weber GmbH & Co. KG` (1) ⟷ `Auto-Weber GmbH & Co. KG` (1)
 
 ## O03 · Operator variants: differ only by legal form
 
-**Affected: 233**
+**Affected: 266**
 
-47 further groups become identical when a trailing legal form (GmbH, AG, GmbH & Co. KG, SE, e.K., B.V., ...) is removed. NOT safe to auto-merge: 'Autohaus Schneider GmbH' and 'Autohaus Schneider e.K.' may be different companies. Goes to the review table, combined with rapidfuzz clustering.
+51 further groups become identical when a trailing legal form (GmbH, AG, GmbH & Co. KG, SE, e.K., B.V., ...) is removed. NOT safe to auto-merge: 'Autohaus Schneider GmbH' and 'Autohaus Schneider e.K.' may be different companies. Goes to the review table, combined with rapidfuzz clustering.
 
 Examples:
 
-- `Hochsauerlandenergie` (2) ⟷ `Hochsauerlandenergie GmbH` (23)
-- `Autohaus Bruno Widmann GmbH` (8) ⟷ `Autohaus Bruno Widmann GmbH & Co. KG` (11)
-- `Franz Rüschkamp GmbH & Co.KG` (1) ⟷ `Franz Rüschkamp GmbH & Co. KG` (16)
-- `Autohaus Schneider GmbH` (2) ⟷ `Autohaus Schneider GmbH & Co. KG` (6) ⟷ `Autohaus Schneider e.K.` (1)
+- `Hochsauerlandenergie GmbH` (23) ⟷ `Hochsauerlandenergie` (2)
+- `S&G Automobil AG` (14) ⟷ `S & G Automobil GmbH` (10)
+- `Autohaus Bruno Widmann GmbH & Co. KG` (11) ⟷ `Autohaus Bruno Widmann GmbH` (8)
+- `Franz Rüschkamp GmbH & Co. KG` (16) ⟷ `Franz Rüschkamp GmbH & Co.KG` (1)
 - `Autohaus Hofmann GmbH` (8) ⟷ `Autohaus Hofmann e.K. ` (1)
 
 ## C01 · Missing or zero coordinates
@@ -272,7 +272,7 @@ Examples:
 
 ## D04 · Same operator within 20 m
 
-**Affected: 70,413**
+**Affected: 70,415**
 
 Records that have another record of the same operator within 20 m. Mostly NOT duplicates: a site with 8 chargers is registered as 8 devices at one address. So this is a site-grouping signal; only records also sharing EVSE-IDs (D02) or all values (D03) are duplicate candidates.
 

@@ -1,0 +1,11 @@
+raw_label,plug_type,current_type,connector
+AC Typ 2 Steckdose,Type 2,AC,socket
+AC Typ 2 Fahrzeugkupplung,Type 2,AC,cable
+DC Fahrzeugkupplung Typ Combo 2 (CCS),CCS,DC,cable
+DC CHAdeMO,CHAdeMO,DC,cable
+AC Schuko,Schuko,AC,socket
+AC Typ 1 Steckdose,Type 1,AC,socket
+DC Megawatt Charging System (MCS),MCS,DC,cable
+AC CEE 5-polig,CEE,AC,socket
+AC CEE 3-polig,CEE,AC,socket
+DC Tesla Fahrzeugkupplung (Typ 2),Tesla DC,DC,cable
