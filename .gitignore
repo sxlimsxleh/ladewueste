@@ -21,3 +21,6 @@ node_modules/
 web/dist/
 
 .DS_Store
+
+# dbt local anonymous user id
+pipeline/dbt/.user.yml
