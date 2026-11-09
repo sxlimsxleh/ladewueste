@@ -1,0 +1,91 @@
+version: 2
+
+# Rule metadata (meta.rule_id/title/why) is read by pipeline/report.py from dbt's manifest,
+# so each rule's description lives in exactly one place.
+
+models:
+  - name: parsed_records
+    description: "One row per register record; R01 numbers parsed, R06 text cleaned."
+    columns:
+      - name: record_no
+        data_tests: [unique, not_null]
+      - name: station_id
+        data_tests: [unique, not_null]
+
+  - name: charging_points
+    description: "One row per charging point (R02), plug types normalised (R03), power per point (R04), EVSE-IDs parsed (R12)."
+    columns:
+      - name: station_id
+        data_tests:
+          - not_null
+          - relationships: {arguments: {to: ref('stations'), field: station_id}}
+      - name: power_kw
+        data_tests: [not_null]
+
+  - name: coord_checks
+    description: "R09 result per record: fixed lat/lon and a status."
+    config:
+      border_tolerance_km: "{{ var('border_tolerance_km') }}"
+    columns:
+      - name: record_no
+        data_tests: [unique, not_null]
+      - name: coord_status
+        data_tests:
+          - accepted_values: {arguments: {values: ['inside', 'swapped', 'border_tolerance', 'outside', 'missing']}}
+
+  - name: operator_map
+    description: "R07 + R08: every cleaned operator spelling -> canonical operator, with review suggestions."
+    config:
+      operator_fuzzy_threshold: "{{ var('operator_fuzzy_threshold') }}"
+    columns:
+      - name: operator_clean
+        data_tests: [unique, not_null]
+      - name: operator_canonical
+        data_tests: [not_null]
+
+  - name: stations
+    description: "One row per register record (charging device), cleaned, typed and flagged. Nothing dropped."
+    columns:
+      - name: station_id
+        data_tests: [unique, not_null]
+      - name: operator
+        data_tests: [not_null]
+      - name: usable_for_coverage
+        data_tests: [not_null]
+
+  - name: rule_findings
+    description: "Union of all rule models: every row touched by every rule."
+    columns:
+      - name: rule_id
+        data_tests: [not_null]
+      - name: action
+        data_tests:
+          - accepted_values: {arguments: {values: ['fixed', 'flagged', 'accepted']}}
+
+  # ------------------------------------------------------------------ rules
+  - name: r01_decimal_commas
+    meta: {rule_id: R01, title: "German decimal commas → numbers", why: "'48,44' is not a number to any database; a naive cast fails or silently drops the decimals."}
+  - name: r02_unpivot_points
+    meta: {rule_id: R02, title: "Wide charging-point columns → one row per point", why: "Power and plugs for points 1–6 sit side by side; you cannot count HPC points without unpivoting."}
+  - name: r03_plug_types
+    meta: {rule_id: R03, title: "Plug lists → normalised plug types", why: "'AC Typ 2 Steckdose; AC Schuko' must become [Schuko, Type 2] to filter by connector."}
+  - name: r04_kw_list_mismatch
+    meta: {rule_id: R04, title: "Plug count ≠ kW value count", why: "Plug and power can't be paired; we keep the point's maximum power and flag it."}
+  - name: r05_implausible_power
+    meta: {rule_id: R05, title: "Implausible power values", why: "A wrong kW value decides whether a site counts as HPC (≥ 150 kW)."}
+  - name: r06_whitespace
+    meta: {rule_id: R06, title: "Stray and non-breaking spaces", why: "Invisible characters make 'EnBW ' and 'EnBW' two different operators."}
+  - name: r07_operator_spelling
+    meta: {rule_id: R07, title: "Operator spellings → one name", why: "'CUBOS Service GmbH' and 'Cubos Service GmbH' are one company; split, both look smaller than they are."}
+  - name: r08_operator_suggestions
+    meta: {rule_id: R08, title: "Possible operator merges (human review)", why: "Same name, different legal form can be a different company; a person decides, the pipeline only suggests."}
+  - name: r09_coordinates
+    meta: {rule_id: R09, title: "Coordinates outside Germany", why: "A charger in the North Sea makes the real place look like a charging desert."}
+  - name: r10_placeholder_coords
+    meta: {rule_id: R10, title: "Placeholder coordinates", why: "One point shared by stations in many towns is not a location; using it would invent a hotspot."}
+  - name: r11_low_precision
+    meta: {rule_id: R11, title: "Low-precision coordinates", why: "Whole-degree coordinates are ~100 km off; useless for a 25 km coverage radius."}
+  - name: r12_evse_ids
+    meta: {rule_id: R12, title: "EVSE-ID cells → valid ID lists", why: "EVSE-IDs are the only reliable way to detect duplicates, so they must be clean first."}
+  - name: r13_duplicates
+    meta: {rule_id: R13, title: "Duplicate records (shared EVSE-ID)", why: "A charging point registered twice would count twice in coverage and kW."}

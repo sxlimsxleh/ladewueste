@@ -1,0 +1,16 @@
+version: 2
+seeds:
+  - name: plug_type_map
+    description: "Raw BNetzA plug label -> normalised plug type. A new label in the register fails the R03 test until it is added here."
+    config:
+      column_types: {raw_label: varchar, plug_type: varchar, current_type: varchar, connector: varchar}
+    columns:
+      - name: raw_label
+        data_tests: [unique, not_null]
+  - name: operator_overrides
+    description: "Human-approved operator merges (R08). Only merges listed here are applied; suggestions live in docs/operator_merge_review.csv."
+    config:
+      column_types: {from_name: varchar, to_name: varchar, approved_by: varchar, note: varchar}
+    columns:
+      - name: from_name
+        data_tests: [unique]

@@ -1,0 +1,112 @@
+kind,from_name,from_records,to_name,to_records,reason,score,applied
+automatic (R07),AMH Airport-Messe-Hotel GmbH,1,AMH Airport Messe Hotel GmbH,,spelling,,yes
+automatic (R07),ARAMIS Hotel und Freizeit GmbH,1,ARAMIS Hotel- und Freizeit GmbH,,spelling,,yes
+automatic (R07),Andreas Stihl AG & Co KG,1,ANDREAS STIHL AG & Co. KG,,spelling,,yes
+automatic (R07),Auto König GmbH&Co.KG,1,Auto König GmbH & Co.KG,,spelling,,yes
+automatic (R07),Auto Weber GmbH & Co. KG,1,Auto Weber Gmbh & Co KG,,spelling,,yes
+automatic (R07),Auto-Leitz GmbH,1,Auto Leitz GmbH,,spelling,,yes
+automatic (R07),Auto-Weber GmbH & Co. KG,1,Auto Weber Gmbh & Co KG,,spelling,,yes
+automatic (R07),Autohaus Marnet GmbH & Co KG,2,Autohaus Marnet GmbH & Co. KG,,spelling,,yes
+automatic (R07),Cubos Service GmbH,1,CUBOS Service GmbH,,spelling,,yes
+automatic (R07),Elektro-Rosin GmbH,2,Elektro Rosin GmbH,,spelling,,yes
+automatic (R07),Erich Röhr GmbH & Co. KG,1,Erich Röhr GmbH & Co KG.,,spelling,,yes
+automatic (R07),HERCHER Die Service Familie GmbH,1,Hercher Die Service Familie GmbH,,spelling,,yes
+automatic (R07),KreuterMedeleSchäfer GmbH & Co. KG,6,KreuterMedeleSchäfer GmbH & Co. KG.,,spelling,,yes
+automatic (R07),LEH BONUS OHG,1,LEH Bonus OHG,,spelling,,yes
+automatic (R07),Landhotel Weserblick GmbH & Co .KG,1,Landhotel Weserblick GmbH & Co. KG,,spelling,,yes
+automatic (R07),Licht-Kraus GmbH,1,Licht Kraus GmbH,,spelling,,yes
+automatic (R07),Nonoxx Pro GmbH,2,nonoxx pro GmbH,,spelling,,yes
+automatic (R07),Paul Klaves e.K.,1,Paul Klaves e.K,,spelling,,yes
+automatic (R07),Rachfahl energy Gbr,1,Rachfahl Energy Gbr,,spelling,,yes
+automatic (R07),Scherer GmbH & Co. KG,1,Scherer GmbH & Co KG,,spelling,,yes
+automatic (R07),Schmidt's Märkte Wehr GmbH,1,Schmidts Märkte Wehr GmbH,,spelling,,yes
+automatic (R07),Sonn'Idyll Hotel&Saunalandschaft,1,SONN'IDYLL Hotel & Saunalandschaft,,spelling,,yes
+automatic (R07),Stadtwerke Schloß Holte-Stukenbrock GmbH,1,Stadtwerke Schloss Holte-Stukenbrock GmbH,,spelling,,yes
+automatic (R07),Stephan Bode Hotelbetriebs- und Verwaltungs GmbH,1,Stephan Bode Hotelbetriebs- und Verwaltungs-GmbH,,spelling,,yes
+automatic (R07),Team elektro Beck GmbH & Co KG,1,Team Elektro Beck GmbH & Co. KG,,spelling,,yes
+automatic (R07),Tennis-Club-Neuwied eV.,1,Tennis Club Neuwied e.V.,,spelling,,yes
+automatic (R07),Wohnungsgenossenschaft Warnow Rostock-Warnemünde eG,2,Wohnungsgenossenschaft Warnow-Rostock Warnemünde eG,,spelling,,yes
+automatic (R07),Yellow-Clean Truck-Wash GmbH,1,Yellow Clean Truck Wash GmbH,,spelling,,yes
+automatic (R07),auto schneider gmbh,1,Auto Schneider GmbH,,spelling,,yes
+automatic (R07),auto-birne GmbH,1,Auto Birne GmbH,,spelling,,yes
+suggested (R08),Auto Kraus e.K.,1,Auto Kraus GmbH,1,legal_form,100,no
+suggested (R08),Auto König GmbH & Co. KG,2,Auto König GmbH & Co.KG,3,legal_form,100,no
+suggested (R08),Auto-Häuser GmbH & Co.KG,1,Auto-Häuser GmbH & Co. KG,1,legal_form,100,no
+suggested (R08),Auto-Köhler GmbH,1,Auto Köhler GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Auto-Müller GmbH,1,Auto-Müller GmbH & Co. KG,3,legal_form,100,no
+suggested (R08),Auto-Schneider GmbH & Co. KG,1,Auto Schneider GmbH,2,legal_form,100,no
+suggested (R08),Autohaus Bruno Widmann GmbH,8,Autohaus Bruno Widmann GmbH & Co. KG,11,legal_form,100,no
+suggested (R08),Autohaus Buchholz GmbH&Co.KG,1,Autohaus Buchholz GmbH & Co. KG,1,legal_form,100,no
+suggested (R08),Autohaus Busch,1,Autohaus Busch GmbH,6,legal_form,100,no
+suggested (R08),Autohaus Fink GmbH,1,Autohaus Fink GmbH & Co KG,2,legal_form,100,no
+suggested (R08),Autohaus Fischer GmbH & Co. KG,1,Autohaus Fischer GmbH,3,legal_form,100,no
+suggested (R08),Autohaus Fritze GmbH & Co.KG,2,Autohaus Fritze GmbH & Co. KG,3,legal_form,100,no
+suggested (R08),Autohaus Groh GmbH & Co.KG,1,Autohaus Groh GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Autohaus Habinghorst GmbH & Co.KG,3,Autohaus Habinghorst,3,legal_form,100,no
+suggested (R08),Autohaus Hofmann e.K.,1,Autohaus Hofmann GmbH,8,legal_form,100,no
+suggested (R08),Autohaus J.B. Lell GmbH,1,Autohaus J.B. Lell e.K.,4,legal_form,100,no
+suggested (R08),Autohaus Konrad GmbH & Co. KG,1,Autohaus Konrad GmbH,1,legal_form,100,no
+suggested (R08),Autohaus Möller GmbH,1,Autohaus Möller GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Autohaus Müller GmbH & Co. KG,2,Autohaus Müller GmbH,2,legal_form,100,no
+suggested (R08),Autohaus Philipp GmbH & Co. KG,1,Autohaus Philipp GmbH,3,legal_form,100,no
+suggested (R08),Autohaus Rausch GmbH,1,Autohaus Rausch GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Autohaus Roth GmbH & Co.KG,1,Autohaus Roth GmbH,2,legal_form,100,no
+suggested (R08),Autohaus Schmidt & Söhne GmbH,1,Autohaus Schmidt & Söhne GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Autohaus Schmidt OHG,1,Autohaus Schmidt GmbH,4,legal_form,100,no
+suggested (R08),Autohaus Schneider GmbH,2,Autohaus Schneider GmbH & Co. KG,6,legal_form,100,no
+suggested (R08),Autohaus Schneider e.K.,1,Autohaus Schneider GmbH & Co. KG,6,legal_form,100,no
+suggested (R08),Autohaus Seebacher GmbH & Co. KG,2,Autohaus Seebacher GmbH,2,legal_form,100,no
+suggested (R08),Autohaus Sperber GmbH,1,Autohaus Sperber GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Autohaus Stoye GmbH&Co. KG,1,Autohaus Stoye GmbH & Co.KG,1,legal_form,100,no
+suggested (R08),Autohaus Strobel OHG,1,Autohaus Strobel GmbH,1,legal_form,100,no
+suggested (R08),Autohaus Wagner GmbH & Co.KG,1,Autohaus Wagner GmbH & Co. KG,1,legal_form,100,no
+suggested (R08),Autohaus Weeber Gmbh & Co. KG,1,Autohaus Weeber GmbH,1,legal_form,100,no
+suggested (R08),Autohaus Wild GmbH & Co. KG,1,Autohaus Wild GmbH & Co.KG,3,legal_form,100,no
+suggested (R08),Autohaus Wittmer GmbH & Co.KG,2,Autohaus Wittmer GmbH,2,legal_form,100,no
+suggested (R08),Franz Rüschkamp GmbH & Co.KG,1,Franz Rüschkamp GmbH & Co. KG,16,legal_form,100,no
+suggested (R08),Friedrich Hoffmann,1,Friedrich Hoffmann GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Georg Weber,1,GEORG WEBER GmbH,1,legal_form,100,no
+suggested (R08),Graf Hardenberg GmbH & Co.KG,1,Graf Hardenberg GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Hochsauerlandenergie,2,Hochsauerlandenergie GmbH,23,legal_form,100,no
+suggested (R08),Hotel Forellenhof,2,Hotel Forellenhof GmbH,4,legal_form,100,no
+suggested (R08),ImmoKa GmbH,3,Immoka,4,legal_form,100,no
+suggested (R08),Klinik Dr. Franz Dengler GmbH,1,Klinik Dr. Franz Dengler,1,legal_form,100,no
+suggested (R08),König & Partner GmbH & Co. KG,1,König & Partner GmbH,2,legal_form,100,no
+suggested (R08),MTK Golfanlagen GmbH&Co.KG,1,MTK Golfanlagen GmbH & Co. KG,1,legal_form,100,no
+suggested (R08),Möbel Kempf GmbH,1,Möbel Kempf GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Rink GmbH,1,Rink GmbH & Co.KG,7,legal_form,100,no
+suggested (R08),S & G Automobil GmbH,10,S&G Automobil AG,14,legal_form,100,no
+suggested (R08),Schenke Delikatessen GmbH &Co.Kg,1,Schenke Delikatessen GmbH & CO. KG,5,legal_form,100,no
+suggested (R08),Schneider KG,1,Schneider GmbH,1,legal_form,100,no
+suggested (R08),Stadtwerke Esslingen GmbH & Co. KG,1,Stadtwerke Esslingen,2,legal_form,100,no
+suggested (R08),Tiemeyer automobile GmbH & Co. KG,1,Tiemeyer automobile GmbH,3,legal_form,100,no
+suggested (R08),Tiemeyer automobile GmbH & Co.KG,2,Tiemeyer automobile GmbH,3,legal_form,100,no
+suggested (R08),WWG Autowelt GmbH & Co.KG,1,WWG-Autowelt GmbH & Co. KG,2,legal_form,100,no
+suggested (R08),Gesellschaft für Beteiligungen und Parken in Bad Kreuznach mbH,14,Gesellschaft für Beteiligungen und Parken in Bad Kreuznach m,42,fuzzy,98,no
+suggested (R08),Stadtwerke Heilsbronn,5,Stadtwerke Heilbronn GmbH,139,fuzzy,98,no
+suggested (R08),Autohaus Brosch GmbH,1,Autohaus Bosch GmbH,2,fuzzy,97,no
+suggested (R08),Autohaus Eckert,1,Autohaus Deckert GmbH,2,fuzzy,97,no
+suggested (R08),Autohaus Hartmann GmbH,1,Autohaus Hartman GmbH,1,fuzzy,97,no
+suggested (R08),Autohaus Hoffmann GmbH,1,Autohaus Hofmann GmbH,8,fuzzy,97,no
+suggested (R08),Autohaus Krammer GmbH,1,Autohaus Kramer GmbH,1,fuzzy,97,no
+suggested (R08),Autohaus Michael GmbH & Co.KG,1,Autohaus Michel GmbH & Co KG,5,fuzzy,97,no
+suggested (R08),Autohaus Schmid GmbH,1,Autohaus Schmidt GmbH,4,fuzzy,97,no
+suggested (R08),Autohaus Stark GmbH,1,Autohaus Starke GmbH & Co. KG,3,fuzzy,97,no
+suggested (R08),Autohaus Stolle GmbH,1,Autohaus Stoll GmbH,5,fuzzy,97,no
+suggested (R08),Autohaus Weeber GmbH,1,Autohaus Weber GmbH,2,fuzzy,97,no
+suggested (R08),Autohaus Wiedmann GmbH,1,Autohaus Widmann GmbH & Co. KG,17,fuzzy,97,no
+suggested (R08),Christian Baur,1,Christian Bauer,1,fuzzy,97,no
+suggested (R08),Christiane Nagel,1,Christian Nagel,1,fuzzy,97,no
+suggested (R08),Christoph Schmidt,1,Christoph Schmid,1,fuzzy,97,no
+suggested (R08),Christoph Weiß,1,Christoph Weis,1,fuzzy,97,no
+suggested (R08),Stadtwerke Engen GmbH,2,Stadtwerke Mengen,5,fuzzy,97,no
+suggested (R08),Andreas Bauer,1,Andrea Bauer,1,fuzzy,96,no
+suggested (R08),Autohaus Braun GmbH,1,Autohaus Baun GmbH,2,fuzzy,96,no
+suggested (R08),Autohaus Kopf GmbH,1,Autohaus Kropf GmbH,14,fuzzy,96,no
+suggested (R08),Autohaus Kratz,1,Autohaus Katz GmbH,1,fuzzy,96,no
+suggested (R08),Autohaus Link GmbH,1,Autohaus Linke GmbH,2,fuzzy,96,no
+suggested (R08),Autohaus Mura GmbH,1,Autohaus Muhra GmbH,1,fuzzy,96,no
+suggested (R08),Christian Otte,1,Christian Ott,1,fuzzy,96,no
+suggested (R08),Michael Thomas,1,Michael Thoma,1,fuzzy,96,no
+suggested (R08),SE Solutions GmbH,6,SEW Solutions GmbH,9,fuzzy,96,no
+suggested (R08),Thomas Ecker,1,Thomas Decker,1,fuzzy,96,no

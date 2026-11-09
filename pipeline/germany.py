@@ -42,6 +42,40 @@ def points_in_germany(lat: np.ndarray, lon: np.ndarray, rings: list[np.ndarray] 
     return inside
 
 
+def classify_coordinates(
+    lat: np.ndarray, lon: np.ndarray, tolerance_km: float, rings: list[np.ndarray] | None = None
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Rule R09. Returns (lat_fixed, lon_fixed, status, border_km) per point.
+
+    status:
+      missing          - empty, unparsable or 0
+      inside           - inside the polygon
+      swapped          - outside, but inside after swapping lat/lon (fixed: swapped back)
+      border_tolerance - outside, but within tolerance_km of the border (polygon generalisation)
+      outside          - more than tolerance_km outside: flagged
+    border_km is NaN for points that are inside.
+    """
+    rings = load_rings() if rings is None else rings
+    lat = np.asarray(lat, dtype=float).copy()
+    lon = np.asarray(lon, dtype=float).copy()
+    status = np.full(lat.shape, "inside", dtype=object)
+    border_km = np.full(lat.shape, np.nan)
+
+    missing = np.isnan(lat) | np.isnan(lon) | (lat == 0) | (lon == 0)
+    status[missing] = "missing"
+    inside = points_in_germany(lat, lon, rings)
+    outside = ~inside & ~missing
+
+    swapped = outside & points_in_germany(lon, lat, rings)
+    status[swapped] = "swapped"
+    lat[swapped], lon[swapped] = lon[swapped].copy(), lat[swapped].copy()
+
+    for i in np.where(outside & ~swapped)[0]:
+        border_km[i] = distance_to_border_km(lat[i], lon[i], rings)
+        status[i] = "border_tolerance" if border_km[i] <= tolerance_km else "outside"
+    return lat, lon, status, border_km
+
+
 KM_PER_DEGREE_LAT = 111.195
 
 
