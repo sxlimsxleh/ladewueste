@@ -1,0 +1,23 @@
+# Raw data is never committed (CLAUDE.md rule 3)
+data/raw/*
+!data/raw/.gitkeep
+data/gold/
+data/*.duckdb
+data/*.duckdb.wal
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# dbt
+pipeline/dbt/target/
+pipeline/dbt/logs/
+pipeline/dbt/dbt_packages/
+
+# Node
+node_modules/
+web/dist/
+
+.DS_Store
