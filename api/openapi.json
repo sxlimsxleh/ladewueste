@@ -1,0 +1,1195 @@
+{
+  "components": {
+    "schemas": {
+      "AppConfig": {
+        "description": "The coverage parameters, so the browser applies exactly the planner's rules.",
+        "properties": {
+          "attribution": {
+            "title": "Attribution",
+            "type": "string"
+          },
+          "data_file": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The register file the data was built from.",
+            "title": "Data File"
+          },
+          "desert_radius_km": {
+            "description": "A cell is desert if no HPC hub is within this distance.",
+            "title": "Desert Radius Km",
+            "type": "number"
+          },
+          "h3_res_detail": {
+            "title": "H3 Res Detail",
+            "type": "integer"
+          },
+          "h3_res_map": {
+            "title": "H3 Res Map",
+            "type": "integer"
+          },
+          "hpc_threshold_kw": {
+            "description": "A charging point is HPC at or above this power.",
+            "title": "Hpc Threshold Kw",
+            "type": "number"
+          },
+          "hub_min_hpc_points": {
+            "description": "A site with at least this many HPC points is a hub.",
+            "title": "Hub Min Hpc Points",
+            "type": "integer"
+          },
+          "licence": {
+            "title": "Licence",
+            "type": "string"
+          },
+          "licence_url": {
+            "title": "Licence Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "hpc_threshold_kw",
+          "desert_radius_km",
+          "hub_min_hpc_points",
+          "h3_res_map",
+          "h3_res_detail",
+          "attribution",
+          "licence",
+          "licence_url",
+          "data_file"
+        ],
+        "title": "AppConfig",
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponse",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Hex": {
+        "properties": {
+          "area_km2": {
+            "title": "Area Km2",
+            "type": "number"
+          },
+          "cell": {
+            "description": "H3 cell index.",
+            "title": "Cell",
+            "type": "string"
+          },
+          "hpc_kw": {
+            "description": "Sum of HPC point power in the cell: the map's elevation.",
+            "title": "Hpc Kw",
+            "type": "number"
+          },
+          "is_desert": {
+            "title": "Is Desert",
+            "type": "boolean"
+          },
+          "lat": {
+            "title": "Lat",
+            "type": "number"
+          },
+          "lon": {
+            "title": "Lon",
+            "type": "number"
+          },
+          "n_hpc_points": {
+            "title": "N Hpc Points",
+            "type": "integer"
+          },
+          "n_points": {
+            "title": "N Points",
+            "type": "integer"
+          },
+          "n_stations": {
+            "title": "N Stations",
+            "type": "integer"
+          },
+          "nearest_hpc_km": {
+            "description": "Distance from the cell centre to the nearest HPC point.",
+            "title": "Nearest Hpc Km",
+            "type": "number"
+          },
+          "nearest_hub_km": {
+            "description": "Distance from the cell centre to the nearest HPC hub.",
+            "title": "Nearest Hub Km",
+            "type": "number"
+          },
+          "top_operators": {
+            "description": "Up to three operators with the most points in the cell.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Top Operators",
+            "type": "array"
+          },
+          "total_kw": {
+            "title": "Total Kw",
+            "type": "number"
+          }
+        },
+        "required": [
+          "cell",
+          "lat",
+          "lon",
+          "area_km2",
+          "n_stations",
+          "n_points",
+          "total_kw",
+          "n_hpc_points",
+          "hpc_kw",
+          "top_operators",
+          "nearest_hpc_km",
+          "nearest_hub_km",
+          "is_desert"
+        ],
+        "title": "Hex",
+        "type": "object"
+      },
+      "HexesResponse": {
+        "properties": {
+          "desert_km2": {
+            "description": "Desert area among the returned cells.",
+            "title": "Desert Km2",
+            "type": "number"
+          },
+          "hexes": {
+            "items": {
+              "$ref": "#/components/schemas/Hex"
+            },
+            "title": "Hexes",
+            "type": "array"
+          },
+          "min_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Kw"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operator"
+          },
+          "res": {
+            "title": "Res",
+            "type": "integer"
+          },
+          "total_km2": {
+            "description": "Area of the returned cells.",
+            "title": "Total Km2",
+            "type": "number"
+          }
+        },
+        "required": [
+          "res",
+          "min_kw",
+          "operator",
+          "desert_km2",
+          "total_km2",
+          "hexes"
+        ],
+        "title": "HexesResponse",
+        "type": "object"
+      },
+      "Operator": {
+        "properties": {
+          "hpc_kw": {
+            "title": "Hpc Kw",
+            "type": "number"
+          },
+          "n_hpc_points": {
+            "title": "N Hpc Points",
+            "type": "integer"
+          },
+          "n_points": {
+            "title": "N Points",
+            "type": "integer"
+          },
+          "n_sites": {
+            "title": "N Sites",
+            "type": "integer"
+          },
+          "n_stations": {
+            "title": "N Stations",
+            "type": "integer"
+          },
+          "operator": {
+            "title": "Operator",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operator",
+          "n_stations",
+          "n_sites",
+          "n_points",
+          "n_hpc_points",
+          "hpc_kw"
+        ],
+        "title": "Operator",
+        "type": "object"
+      },
+      "PlanResponse": {
+        "properties": {
+          "desert_km2_after": {
+            "title": "Desert Km2 After",
+            "type": "number"
+          },
+          "desert_km2_before": {
+            "title": "Desert Km2 Before",
+            "type": "number"
+          },
+          "n": {
+            "title": "N",
+            "type": "integer"
+          },
+          "radius_km": {
+            "title": "Radius Km",
+            "type": "number"
+          },
+          "sites": {
+            "items": {
+              "$ref": "#/components/schemas/PlanSite"
+            },
+            "title": "Sites",
+            "type": "array"
+          }
+        },
+        "required": [
+          "n",
+          "radius_km",
+          "desert_km2_before",
+          "desert_km2_after",
+          "sites"
+        ],
+        "title": "PlanResponse",
+        "type": "object"
+      },
+      "PlanSite": {
+        "properties": {
+          "cell": {
+            "title": "Cell",
+            "type": "string"
+          },
+          "desert_km2_remaining": {
+            "title": "Desert Km2 Remaining",
+            "type": "number"
+          },
+          "desert_km2_removed": {
+            "title": "Desert Km2 Removed",
+            "type": "number"
+          },
+          "lat": {
+            "title": "Lat",
+            "type": "number"
+          },
+          "lon": {
+            "title": "Lon",
+            "type": "number"
+          },
+          "rank": {
+            "title": "Rank",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rank",
+          "cell",
+          "lat",
+          "lon",
+          "desert_km2_removed",
+          "desert_km2_remaining"
+        ],
+        "title": "PlanSite",
+        "type": "object"
+      },
+      "QualityExample": {
+        "properties": {
+          "action": {
+            "enum": [
+              "fixed",
+              "flagged",
+              "accepted"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "after": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After"
+          },
+          "before": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before"
+          },
+          "point_no": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Point No"
+          },
+          "station_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Station Id"
+          }
+        },
+        "required": [
+          "station_id",
+          "point_no",
+          "action",
+          "before",
+          "after"
+        ],
+        "title": "QualityExample",
+        "type": "object"
+      },
+      "QualityFunnel": {
+        "properties": {
+          "charging_points": {
+            "title": "Charging Points",
+            "type": "integer"
+          },
+          "charging_points_usable": {
+            "title": "Charging Points Usable",
+            "type": "integer"
+          },
+          "hpc_points_usable": {
+            "title": "Hpc Points Usable",
+            "type": "integer"
+          },
+          "operators_as_registered": {
+            "title": "Operators As Registered",
+            "type": "integer"
+          },
+          "operators_canonical": {
+            "title": "Operators Canonical",
+            "type": "integer"
+          },
+          "raw_records": {
+            "title": "Raw Records",
+            "type": "integer"
+          },
+          "stations": {
+            "title": "Stations",
+            "type": "integer"
+          },
+          "stations_duplicate": {
+            "title": "Stations Duplicate",
+            "type": "integer"
+          },
+          "stations_usable": {
+            "title": "Stations Usable",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "raw_records",
+          "stations",
+          "stations_usable",
+          "stations_duplicate",
+          "operators_as_registered",
+          "operators_canonical",
+          "charging_points",
+          "charging_points_usable",
+          "hpc_points_usable"
+        ],
+        "title": "QualityFunnel",
+        "type": "object"
+      },
+      "QualityReport": {
+        "properties": {
+          "funnel": {
+            "$ref": "#/components/schemas/QualityFunnel"
+          },
+          "generated_at": {
+            "format": "date-time",
+            "title": "Generated At",
+            "type": "string"
+          },
+          "rules": {
+            "items": {
+              "$ref": "#/components/schemas/QualityRule"
+            },
+            "title": "Rules",
+            "type": "array"
+          },
+          "source": {
+            "$ref": "#/components/schemas/QualitySource"
+          }
+        },
+        "required": [
+          "generated_at",
+          "source",
+          "funnel",
+          "rules"
+        ],
+        "title": "QualityReport",
+        "type": "object"
+      },
+      "QualityRule": {
+        "properties": {
+          "actions": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "propertyNames": {
+              "enum": [
+                "fixed",
+                "flagged",
+                "accepted"
+              ]
+            },
+            "title": "Actions",
+            "type": "object"
+          },
+          "examples": {
+            "items": {
+              "$ref": "#/components/schemas/QualityExample"
+            },
+            "title": "Examples",
+            "type": "array"
+          },
+          "finding_rows": {
+            "description": "Rows in the rule model (a record can have several, e.g. per point).",
+            "title": "Finding Rows",
+            "type": "integer"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "rows_affected": {
+            "description": "Distinct register records touched by the rule.",
+            "title": "Rows Affected",
+            "type": "integer"
+          },
+          "rule_id": {
+            "title": "Rule Id",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "why": {
+            "title": "Why",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rule_id",
+          "title",
+          "why",
+          "model",
+          "rows_affected",
+          "finding_rows",
+          "actions",
+          "examples"
+        ],
+        "title": "QualityRule",
+        "type": "object"
+      },
+      "QualitySource": {
+        "properties": {
+          "attribution": {
+            "title": "Attribution",
+            "type": "string"
+          },
+          "file": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File"
+          },
+          "licence": {
+            "title": "Licence",
+            "type": "string"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sha256"
+          }
+        },
+        "required": [
+          "file",
+          "sha256",
+          "licence",
+          "attribution"
+        ],
+        "title": "QualitySource",
+        "type": "object"
+      },
+      "Station": {
+        "properties": {
+          "commissioned_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Commissioned On"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "house_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "House No"
+          },
+          "lat": {
+            "title": "Lat",
+            "type": "number"
+          },
+          "lon": {
+            "title": "Lon",
+            "type": "number"
+          },
+          "max_point_kw": {
+            "title": "Max Point Kw",
+            "type": "number"
+          },
+          "n_hpc_points": {
+            "title": "N Hpc Points",
+            "type": "integer"
+          },
+          "n_points": {
+            "title": "N Points",
+            "type": "integer"
+          },
+          "operator": {
+            "title": "Operator",
+            "type": "string"
+          },
+          "plug_types": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Plug Types",
+            "type": "array"
+          },
+          "postcode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Postcode"
+          },
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "station_id": {
+            "title": "Station Id",
+            "type": "string"
+          },
+          "street": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Street"
+          },
+          "town": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Town"
+          }
+        },
+        "required": [
+          "station_id",
+          "site_id",
+          "operator",
+          "display_name",
+          "lat",
+          "lon",
+          "n_points",
+          "n_hpc_points",
+          "max_point_kw",
+          "plug_types",
+          "street",
+          "house_no",
+          "postcode",
+          "town",
+          "commissioned_on"
+        ],
+        "title": "Station",
+        "type": "object"
+      },
+      "StationsResponse": {
+        "properties": {
+          "bbox": {
+            "description": "[min_lon, min_lat, max_lon, max_lat]",
+            "items": {
+              "type": "number"
+            },
+            "title": "Bbox",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "stations": {
+            "items": {
+              "$ref": "#/components/schemas/Station"
+            },
+            "title": "Stations",
+            "type": "array"
+          },
+          "truncated": {
+            "description": "True if more stations are in the box than were returned.",
+            "title": "Truncated",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "bbox",
+          "limit",
+          "truncated",
+          "stations"
+        ],
+        "title": "StationsResponse",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Germany's HPC charging deserts, from the Bundesnetzagentur Ladesäulenregister (CC BY 4.0, Bundesnetzagentur.de).",
+    "title": "Ladewüste API",
+    "version": "0.4.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/config": {
+      "get": {
+        "operationId": "get_config_config_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppConfig"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Config",
+        "tags": [
+          "meta"
+        ]
+      }
+    },
+    "/hexes": {
+      "get": {
+        "operationId": "get_hexes_hexes_get",
+        "parameters": [
+          {
+            "description": "H3 resolution: the map or the detail resolution from /config.",
+            "in": "query",
+            "name": "res",
+            "required": true,
+            "schema": {
+              "description": "H3 resolution: the map or the detail resolution from /config.",
+              "title": "Res",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Count only points with at least this power.",
+            "in": "query",
+            "name": "min_kw",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Count only points with at least this power.",
+              "title": "Min Kw"
+            }
+          },
+          {
+            "description": "Count only this operator's points.",
+            "in": "query",
+            "name": "operator",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Count only this operator's points.",
+              "title": "Operator"
+            }
+          },
+          {
+            "description": "min_lon,min_lat,max_lon,max_lat (WGS84), e.g. 13.0,52.3,13.8,52.7. Required for the detail resolution.",
+            "in": "query",
+            "name": "bbox",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "min_lon,min_lat,max_lon,max_lat (WGS84), e.g. 13.0,52.3,13.8,52.7. Required for the detail resolution.",
+              "title": "Bbox"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HexesResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gold data missing: run `make pipeline`."
+          }
+        },
+        "summary": "Get Hexes",
+        "tags": [
+          "map"
+        ]
+      }
+    },
+    "/operators": {
+      "get": {
+        "operationId": "get_operators_operators_get",
+        "parameters": [
+          {
+            "description": "Case-insensitive substring of the operator name.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Case-insensitive substring of the operator name.",
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Operator"
+                  },
+                  "title": "Response Get Operators Operators Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gold data missing: run `make pipeline`."
+          }
+        },
+        "summary": "Get Operators",
+        "tags": [
+          "map"
+        ]
+      }
+    },
+    "/plan": {
+      "get": {
+        "operationId": "get_plan_plan_get",
+        "parameters": [
+          {
+            "description": "Number of sites to place.",
+            "in": "query",
+            "name": "n",
+            "required": false,
+            "schema": {
+              "default": 10,
+              "description": "Number of sites to place.",
+              "maximum": 50,
+              "minimum": 1,
+              "title": "N",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Coverage radius; defaults to desert_radius_km.",
+            "in": "query",
+            "name": "radius_km",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100,
+                  "minimum": 5,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Coverage radius; defaults to desert_radius_km.",
+              "title": "Radius Km"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gold data missing: run `make pipeline`."
+          }
+        },
+        "summary": "Get Plan",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/quality": {
+      "get": {
+        "operationId": "get_quality_quality_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityReport"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gold data missing: run `make pipeline`."
+          }
+        },
+        "summary": "Get Quality",
+        "tags": [
+          "data doctor"
+        ]
+      }
+    },
+    "/stations": {
+      "get": {
+        "operationId": "get_stations_stations_get",
+        "parameters": [
+          {
+            "description": "min_lon,min_lat,max_lon,max_lat (WGS84), e.g. 13.0,52.3,13.8,52.7",
+            "in": "query",
+            "name": "bbox",
+            "required": true,
+            "schema": {
+              "description": "min_lon,min_lat,max_lon,max_lat (WGS84), e.g. 13.0,52.3,13.8,52.7",
+              "title": "Bbox",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 2000,
+              "maximum": 5000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gold data missing: run `make pipeline`."
+          }
+        },
+        "summary": "Get Stations",
+        "tags": [
+          "map"
+        ]
+      }
+    }
+  }
+}

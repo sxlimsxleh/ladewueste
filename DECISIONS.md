@@ -62,3 +62,16 @@ Each entry: the decision, the alternative we rejected, and where the AI's first 
 
 ## M3 · Known limitation: borders
 - HPC chargers just across the border (NL, BE, LU, FR, CH, AT, CZ, PL, DK) are not in the register, so border areas look more like deserts than they are: planner pick #18 on the default run sits at the Swiss border near Waldshut. No foreign data source is in scope; documented here and for the README's limits.
+
+## M4 · API shape
+- **Decision:** the API reads only `data/gold/*.parquet` through an in-memory DuckDB (one view per file, one cursor per request). It opens the files on first request, so it starts before the pipeline has run and answers 503 "run `make pipeline`" instead of crashing.
+- **Decision:** `/hexes` filters (min_kw, operator) re-aggregate counts and height from `points`, but never change `is_desert` or distances: coverage is defined by hubs, and a display filter must not make deserts appear or vanish.
+- **Decision:** res 7 needs a bbox (all 76,744 cells would be ~15 MB of JSON); res 6 is 3.6 MB raw, 0.8 MB gzipped.
+- **Added (approved):** `/config` (so the browser uses the planner's exact parameters) and `/operators?q=` (filter dropdown).
+- **Rejected:** loading the DuckDB file the pipeline writes (couples the API to dbt internals and locks the file during a pipeline run).
+
+## M4 · Typed contract
+- **Decision:** Pydantic models -> `api/openapi.json` (committed) -> `openapi-typescript` -> `web/src/lib/api-types.ts` (committed, never hand-edited). A pytest fails when the committed schema drifts from the code; checked by adding a field without regenerating.
+- **Checked:** the generated types reject a missing `res`, a string `min_kw` and a misspelt response field at compile time.
+- **Tooling:** TypeScript pinned to 5.9.3, not the new 7.0: openapi-typescript declares `typescript ^5.x`, typescript-eslint supports `< 6.1`.
+- **API tests** run on a 3-cell synthetic gold folder built in `conftest.py`, so CI needs no 55 MB download.

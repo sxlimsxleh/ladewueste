@@ -1,5 +1,5 @@
 # Ladewüste. See CLAUDE.md "Commands".
-.PHONY: setup download pipeline profile test api web clean
+.PHONY: setup download pipeline profile types test api web clean
 
 setup:            ## install Python deps (web deps arrive in milestone 5)
 	uv sync
@@ -19,12 +19,17 @@ pipeline:         ## raw CSV -> bronze -> mess report -> dbt build (models + tes
 profile:          ## regenerate docs/mess_report.md from the existing bronze table
 	uv run python -m pipeline.profile
 
-test:             ## pytest + dbt tests (needs `make pipeline` once); tsc joins in milestone 5
+types:            ## FastAPI models -> api/openapi.json -> web/src/lib/api-types.ts
+	uv run python -m api.export_openapi
+	cd web && npm run -s types
+
+test:             ## pytest + dbt tests (needs `make pipeline` once) + TypeScript typecheck
 	uv run pytest -q
 	uv run python -m pipeline.run_dbt test
+	cd web && npm run -s typecheck
 
-api:
-	@echo "API arrives in milestone 4"
+api:              ## FastAPI on :8000 (docs at http://localhost:8000/docs)
+	uv run uvicorn api.app.main:app --reload --port 8000
 
 web:
 	@echo "Web app arrives in milestone 5"
