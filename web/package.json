@@ -1,0 +1,14 @@
+{
+  "name": "ladewueste-web",
+  "private": true,
+  "version": "0.4.0",
+  "type": "module",
+  "scripts": {
+    "types": "openapi-typescript ../api/openapi.json -o src/lib/api-types.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3"
+  }
+}
