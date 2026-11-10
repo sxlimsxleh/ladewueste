@@ -17,14 +17,15 @@ boundary:
 
 coverage:
   hpc_threshold_kw: 150        # a charging point is HPC if power_kw >= this
-  desert_radius_km: 25         # a cell is desert if nearest HPC is farther than this
+  hub_min_hpc_points: 6        # a site with at least this many HPC points is an HPC hub (assumption: confirm with Voltbahn)
+  desert_radius_km: 25         # a cell is desert if the nearest HPC hub is farther than this
   h3_resolutions:
     map: 6
     detail: 7
 
 cleaning:
   max_plausible_point_kw: 1500 # above this a single charging point is flagged as implausible
-  duplicate_radius_m: 20       # same operator within this distance -> same site (milestone 3); duplicates come from shared EVSE-IDs (R13)
+  site_radius_m: 20            # same operator within this distance = one site (duplicates come from shared EVSE-IDs, R13)
   border_tolerance_km: 2       # outside the 1:10m polygon but this close to the border = likely generalisation, not an error
   placeholder_min_towns: 4     # one coordinate used by stations in this many different towns = placeholder
   low_precision_decimals: 2    # lat or lon with this many decimals or fewer (~1 km) is low precision

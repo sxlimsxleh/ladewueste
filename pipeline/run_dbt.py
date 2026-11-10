@@ -33,6 +33,11 @@ def dbt_vars() -> dict:
         "placeholder_min_towns": cleaning["placeholder_min_towns"],
         "low_precision_decimals": cleaning["low_precision_decimals"],
         "operator_fuzzy_threshold": cleaning["operator_fuzzy_threshold"],
+        "site_radius_m": cleaning["site_radius_m"],
+        "desert_radius_km": coverage["desert_radius_km"],
+        "hub_min_hpc_points": coverage["hub_min_hpc_points"],
+        "h3_res_map": coverage["h3_resolutions"]["map"],
+        "h3_res_detail": coverage["h3_resolutions"]["detail"],
     }
 
 

@@ -408,7 +408,7 @@ def check_duplicates(con, cfg: dict, n_groups: int) -> list[Finding]:
     for op, la, lo in rows:
         if la is not None and lo is not None:
             by_operator[surface_key(op or "")].append((la, lo))
-    radius = cfg["duplicate_radius_m"] / 1000 / EARTH_RADIUS_KM
+    radius = cfg["site_radius_m"] / 1000 / EARTH_RADIUS_KM
     colocated = 0
     for points in by_operator.values():
         if len(points) < 2:
@@ -440,8 +440,8 @@ def check_duplicates(con, cfg: dict, n_groups: int) -> list[Finding]:
             invalid_examples,
         ),
         Finding(
-            "D04", f"Same operator within {cfg['duplicate_radius_m']} m", colocated,
-            f"Records that have another record of the same operator within {cfg['duplicate_radius_m']} m. "
+            "D04", f"Same operator within {cfg['site_radius_m']} m", colocated,
+            f"Records that have another record of the same operator within {cfg['site_radius_m']} m. "
             "Mostly NOT duplicates: a site with 8 chargers is registered as 8 devices at one address. "
             "So this is a site-grouping signal; only records also sharing EVSE-IDs (D02) or all values (D03) "
             "are duplicate candidates.",

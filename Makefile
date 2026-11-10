@@ -8,11 +8,12 @@ setup:            ## install Python deps (web deps arrive in milestone 5)
 download:         ## fetch the register CSV (CC BY 4.0) + Germany boundary into data/
 	uv run python -m pipeline.download
 
-pipeline:         ## raw CSV -> bronze -> mess report -> dbt build (models + tests) -> quality_report.json
+pipeline:         ## raw CSV -> bronze -> mess report -> dbt build (models + tests) -> gold parquet + quality_report.json
 	@ls data/raw/Ladesaeulenregister*.csv >/dev/null 2>&1 || $(MAKE) download
 	uv run python -m pipeline.load_bronze
 	uv run python -m pipeline.profile
 	uv run python -m pipeline.run_dbt build
+	uv run python -m pipeline.export
 	uv run python -m pipeline.report
 
 profile:          ## regenerate docs/mess_report.md from the existing bronze table

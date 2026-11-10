@@ -45,3 +45,20 @@ Each entry: the decision, the alternative we rejected, and where the AI's first 
 
 ## M2 · Tests that fail when they should
 - Checked by breaking the seeds on purpose: removing `AC Schuko` from `plug_type_map.csv` fails `r03_no_unknown_plug_labels` (3,871 points), and a typo in `operator_overrides.csv` fails `r08_overrides_point_to_known_operators`.
+
+## M3 · What a "charging desert" is
+- **Decision (approved by Selim):** desert = no **HPC hub** (a site with >= 6 HPC points) within 25 km. Result: 600 res-6 cells, 19,318 km² (5.4% of Germany). `hub_min_hpc_points` is in `config.yaml` and is an assumption to confirm with the customer.
+- **Rejected:** CLAUDE.md's original "nearest single HPC point > 25 km". On the real data that leaves 62 km² (2 cells, both on the border): the max distance anywhere is 25.4 km. Of 9,706 sites with an HPC point, 4,594 have fewer than 4, often one 150 kW charger at a car dealer, which is not what an expansion team means by coverage. Also rejected: lowering the radius to 10 km (keeps counting lone chargers as coverage) and changing radius and hub size together (harder to explain).
+- **Lesson:** the brief's definition came from before the data was profiled. Running the numbers first turned "build the planner" into a question for the customer, which is the actual FDE job.
+
+## M3 · Coverage rule shared by planner and play mode
+- **Decision:** covered = cell centre within the radius, great-circle. The planner uses BallTree; the browser will use h3-js `gridDisk` to find candidates and the same distance filter, so the user's score and the algorithm's are computed identically.
+- **Rejected:** plain `gridDisk(k)` rings: a hexagonal ring only approximates a circle, so the two scores would disagree slightly.
+- **Objective:** maximise uncovered desert **km²** (cell areas vary with latitude), not cell count, to match the "Desert area: X km² → Y km²" counter.
+
+## M3 · Sites and hubs
+- **Decision:** sites are connected components (union-find over BallTree neighbour pairs, per operator): A–B and B–C within 20 m make A, B, C one site even if A–C is 40 m. A site is named after its lowest station_id, which stays stable between runs.
+- **Where the AI was wrong:** hub distance was first measured to each hub site's *average* position. A dbt test (`nearest HPC point <= nearest hub`) failed on 9 cells: a chained site can stretch over hundreds of metres (the Tesla factory site has 513 stations) and its centre is not where any charger is. Now measured to the hub's actual HPC points.
+
+## M3 · Known limitation: borders
+- HPC chargers just across the border (NL, BE, LU, FR, CH, AT, CZ, PL, DK) are not in the register, so border areas look more like deserts than they are: planner pick #18 on the default run sits at the Swiss border near Waldshut. No foreign data source is in scope; documented here and for the README's limits.
