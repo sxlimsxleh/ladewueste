@@ -135,3 +135,9 @@ def test_committed_openapi_is_up_to_date() -> None:
     """The web app's TypeScript types are generated from api/openapi.json. If this fails,
     the API changed without regenerating the contract: run `make types`."""
     assert OPENAPI_PATH.read_text(encoding="utf-8") == openapi_json()
+
+
+def test_root_redirects_to_docs(client: TestClient) -> None:
+    response = client.get("/", follow_redirects=False)
+    assert response.status_code == 307
+    assert response.headers["location"] == "/docs"

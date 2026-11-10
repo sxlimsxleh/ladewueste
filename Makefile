@@ -26,13 +26,13 @@ types:            ## FastAPI models -> api/openapi.json -> web/src/lib/api-types
 test:             ## pytest + dbt tests (needs `make pipeline` once) + TypeScript typecheck
 	uv run pytest -q
 	uv run python -m pipeline.run_dbt test
-	cd web && npm run -s typecheck
+	cd web && npm run -s typecheck && npm test --silent
 
 api:              ## FastAPI on :8000 (docs at http://localhost:8000/docs)
 	uv run uvicorn api.app.main:app --reload --port 8000
 
-web:
-	@echo "Web app arrives in milestone 5"
+web:              ## Vite dev server on :5173 (calls the API through /api; run `make api` too)
+	cd web && npm run dev
 
 clean:            ## remove derived data (keeps the downloaded raw file)
 	rm -f data/ladewueste.duckdb data/ladewueste.duckdb.wal
