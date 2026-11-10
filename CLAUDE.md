@@ -61,16 +61,18 @@ DECISIONS.md              # decision, rejected alternative, where the AI got it 
 - plug types as comma-separated lists -> array, normalised vocabulary (Type 2, CCS, CHAdeMO, Schuko, ...)
 - operator name variants (case, whitespace, legal suffixes GmbH / AG / AG & Co. KG / SE) -> canonical name via rules + rapidfuzz clustering; export the merge table for review
 - coordinates outside Germany's boundary, swapped lat/lon (swap if the swap lands inside), zero/null coords -> flag
-- duplicate stations (same operator, coordinates within ~20 m) -> merge, keep provenance
+- duplicate stations: records sharing a valid EVSE-ID -> flag `duplicate_of`, keep provenance (decided in M1/M2: "same operator within ~20 m" is a *site*, not a duplicate)
 - implausible power values (0, or above a sane max) -> flag
 
 ## Coverage model
 
 - Universe: H3 cells (res 6 for the map, res 7 for detail) whose centre lies inside Germany.
-- `nearest_hpc_km` per cell from cell centre to nearest HPC charging point (BallTree haversine).
-- `is_desert = nearest_hpc_km > desert_radius_km` (config, default 25).
-- Greedy planner: candidate = any desert cell; pick the cell that covers the most desert cells within the radius; mark them covered; repeat n times. Return sites in pick order with "desert km² removed" per pick.
-- Play mode does the same coverage update client-side with h3-js `gridDisk` so it's instant; API `/plan` is the benchmark the user competes against.
+- Site: usable stations of the same operator within `site_radius_m` (20 m) of each other. HPC hub: a site with >= `hub_min_hpc_points` (6) HPC points.
+- `nearest_hpc_km` per cell from cell centre to the nearest HPC charging point; `nearest_hub_km` to the nearest HPC point of a hub (BallTree haversine).
+- `is_desert = nearest_hub_km > desert_radius_km` (config, default 25). Decided in M3: with "any HPC point" only 62 km² of Germany was desert at 25 km.
+- Coverage rule (planner and play mode): a cell is covered by a site if its centre is within `desert_radius_km` great-circle distance of the site.
+- Greedy planner: candidate = any desert cell; pick the cell that covers the most uncovered desert km²; mark them covered; repeat n times. Return sites in pick order with "desert km² removed" per pick.
+- Play mode does the same coverage update client-side with h3-js (`gridDisk` for candidates, then the distance filter) so it's instant; API `/plan` is the benchmark the user competes against.
 
 ## Screens
 

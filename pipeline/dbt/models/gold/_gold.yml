@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: station_geo
+    description: "Site and H3 cells per usable station (pipeline/geo.py group_sites)."
+    config:
+      site_radius_m: "{{ var('site_radius_m') }}"
+      h3_res_map: "{{ var('h3_res_map') }}"
+      h3_res_detail: "{{ var('h3_res_detail') }}"
+    columns:
+      - name: station_id
+        data_tests: [unique, not_null]
+      - name: site_id
+        data_tests:
+          - not_null
+          - relationships: {arguments: {to: ref('station_geo'), field: station_id}}
+
+  - name: hex_universe
+    description: "H3 cells whose centre lies in Germany, with nearest HPC point and HPC hub distances (pipeline/geo.py)."
+    config:
+      hub_min_hpc_points: "{{ var('hub_min_hpc_points') }}"
+      h3_res_map: "{{ var('h3_res_map') }}"
+      h3_res_detail: "{{ var('h3_res_detail') }}"
+    columns:
+      - name: nearest_hpc_km
+        data_tests: [not_null]
+      - name: nearest_hub_km
+        data_tests: [not_null]
+
+  - name: usable_stations
+    columns:
+      - name: station_id
+        data_tests: [unique, not_null]
+
+  - name: points
+    columns:
+      - name: power_kw
+        data_tests: [not_null]
+
+  - name: sites
+    columns:
+      - name: site_id
+        data_tests: [unique, not_null]
+
+  - name: hexes
+    description: "Per H3 cell: points, kW, HPC count, nearest HPC km, desert flag."
+    columns:
+      - name: cell
+        data_tests: [not_null]
+      - name: res
+        data_tests:
+          - accepted_values: {arguments: {values: ["{{ var('h3_res_map') }}", "{{ var('h3_res_detail') }}"], quote: false}}
+
+  - name: operators
+    columns:
+      - name: operator
+        data_tests: [unique, not_null]
