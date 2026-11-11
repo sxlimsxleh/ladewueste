@@ -557,7 +557,7 @@ def build_report() -> str:
 
 
 def main() -> None:
-    DOCS_DIR.mkdir(exist_ok=True)
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
     out = DOCS_DIR / "mess_report.md"
     out.write_text(build_report(), encoding="utf-8")
     print(f"Wrote {out}")

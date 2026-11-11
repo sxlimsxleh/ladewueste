@@ -36,10 +36,12 @@ export function Filters({ powerClass, onPowerClassChange, operator, onOperatorCh
     placeholderData: (previous) => previous,
   });
   // cmdk highlights nothing when results arrive from the API, so Enter would do nothing.
-  // Highlight the first result each time the list changes, so "type, Enter" works.
-  const [highlighted, setHighlighted] = useState("");
-  const first = operators.data?.[0]?.operator ?? "";
-  useEffect(() => setHighlighted(first), [first]);
+  // The highlight is the user's choice if it is still in the list, otherwise the first result,
+  // so "type, Enter" works. Derived on every render: no state to keep in sync.
+  const [chosen, setChosen] = useState("");
+  const highlighted = operators.data?.some((o) => o.operator === chosen)
+    ? chosen
+    : (operators.data?.[0]?.operator ?? "");
 
   return (
     <div className="space-y-3">
@@ -81,7 +83,7 @@ export function Filters({ powerClass, onPowerClassChange, operator, onOperatorCh
             </PopoverTrigger>
             <PopoverContent className="w-80">
               {/* The API filters, so cmdk's own fuzzy filter is switched off. */}
-              <Command shouldFilter={false} value={highlighted} onValueChange={setHighlighted}>
+              <Command shouldFilter={false} value={highlighted} onValueChange={setChosen}>
                 <CommandInput placeholder="Search operators…" value={search} onValueChange={setSearch} />
                 <CommandList>
                   {operators.isFetching && !operators.data ? (

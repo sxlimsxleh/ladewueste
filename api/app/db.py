@@ -5,7 +5,6 @@ Each Parquet file becomes a view of the same name. Every request gets its own cu
 """
 
 import json
-import os
 from pathlib import Path
 from typing import Any
 
@@ -22,8 +21,8 @@ class DataNotReady(Exception):
 
 
 def gold_dir_from_env() -> Path:
-    """data/gold by default; LADEWUESTE_GOLD_DIR overrides it (e.g. inside Docker)."""
-    return Path(os.environ.get("LADEWUESTE_GOLD_DIR", GOLD_DIR))
+    """data/gold by default; follows LADEWUESTE_DATA_DIR (see pipeline/config.py), e.g. inside Docker."""
+    return GOLD_DIR
 
 
 class GoldStore:

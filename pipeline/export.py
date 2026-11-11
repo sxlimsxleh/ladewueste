@@ -16,7 +16,7 @@ TABLES = {
 
 def main() -> None:
     GOLD_DIR.mkdir(parents=True, exist_ok=True)
-    con = duckdb.connect(str(DUCKDB_PATH), read_only=True)
+    con = duckdb.connect(str(DUCKDB_PATH))  # same mode as dbt: run_all keeps dbt's connection open in-process
     for table, name in TABLES.items():
         path = GOLD_DIR / f"{name}.parquet"
         con.execute(f"COPY gold.{table} TO '{path}' (FORMAT parquet, COMPRESSION zstd)")

@@ -57,14 +57,16 @@ export function usePlayGame({ hexes, plan, radiusKm, res, budget }: Options): Pl
   const algorithmShownResult = useMemo(() => compute(algorithmSites), [compute, algorithmSites]);
   const algorithmFull = useMemo(() => compute(allAlgorithmSites), [compute, allAlgorithmSites]);
 
-  // Auto-plan: drop the algorithm's sites one by one.
+  // Auto-plan: drop the algorithm's sites one by one; the last step also ends the animation.
   useEffect(() => {
-    if (!autoPlanning) return;
-    if (algorithmShown >= allAlgorithmSites.length) {
-      setAutoPlanning(false);
-      return;
-    }
-    const id = window.setTimeout(() => setAlgorithmShown((n) => n + 1), algorithmShown === 0 ? 150 : AUTO_PLAN_STEP_MS);
+    if (!autoPlanning || algorithmShown >= allAlgorithmSites.length) return;
+    const id = window.setTimeout(
+      () => {
+        setAlgorithmShown(algorithmShown + 1);
+        if (algorithmShown + 1 >= allAlgorithmSites.length) setAutoPlanning(false);
+      },
+      algorithmShown === 0 ? 150 : AUTO_PLAN_STEP_MS,
+    );
     return () => window.clearTimeout(id);
   }, [autoPlanning, algorithmShown, allAlgorithmSites.length]);
 
@@ -94,7 +96,7 @@ export function usePlayGame({ hexes, plan, radiusKm, res, budget }: Options): Pl
       setView("you");
     },
     autoPlan: () => {
-      if (!plan) return;
+      if (!plan || plan.sites.length === 0) return;
       setAlgorithmShown(0);
       setView("algorithm");
       setAutoPlanning(true);

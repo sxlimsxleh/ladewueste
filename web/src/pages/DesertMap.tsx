@@ -160,8 +160,11 @@ export function DesertMap() {
 
   // Keyboard: Esc closes the panel; P toggles play mode; in play mode Enter drops a site at the
   // crosshair (map centre) and Backspace undoes. Ignored while typing in a field or on a button.
+  // Event handlers registered once read the latest game through this ref.
   const gameRef = useRef(game);
-  gameRef.current = game;
+  useEffect(() => {
+    gameRef.current = game;
+  });
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") setSelected(null);
@@ -181,10 +184,9 @@ export function DesertMap() {
     return () => window.removeEventListener("keydown", onKey);
   }, [map]);
 
-  // In play mode a click anywhere on the map drops a site; the side panel stays closed.
+  // In play mode a click anywhere on the map drops a site (the side panel is hidden, see selectedHex).
   useEffect(() => {
     if (!map || !playing) return;
-    setSelected(null);
     const onClick = (event: maplibregl.MapMouseEvent) => {
       const site: Site = { lat: event.lngLat.lat, lon: event.lngLat.lng };
       gameRef.current.drop(site);
@@ -202,10 +204,10 @@ export function DesertMap() {
   const visibleHexes = useDetail ? detail.data : hexes.data;
 
   const selectedHex = useMemo(() => {
-    if (!selected) return null;
+    if (!selected || playing) return null;
     const source = selected.res === resMap ? hexes.data : detail.data;
     return source?.hexes.find((h) => h.cell === selected.cell) ?? null;
-  }, [selected, resMap, hexes.data, detail.data]);
+  }, [selected, playing, resMap, hexes.data, detail.data]);
 
   useEffect(() => {
     const overlay = overlayRef.current;

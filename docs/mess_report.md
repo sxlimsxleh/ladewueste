@@ -1,6 +1,6 @@
 # Mess report: Ladesäulenregister
 
-Generated 2026-11-10 by `pipeline/profile.py` from the bronze table, before any cleaning.
+Generated 2026-11-11 by `pipeline/profile.py` from the bronze table, before any cleaning.
 
 - Source file: `Ladesaeulenregister_BNetzA_2026-09-01.csv` (55,559,083 bytes)
 - SHA-256: `cdd8e38f1fa7e8512bd97caa8cf77e9f875436be1f8fe3fe1f2bd9789a504c5b`

@@ -1,0 +1,27 @@
+# docker compose --profile pipeline run --rm pipeline   # once: download + clean + build ./data
+# docker compose up --build                             # then: app on http://localhost:8080
+services:
+  api:
+    build: { context: ., dockerfile: docker/api.Dockerfile }
+    image: ladewueste-api
+    volumes:
+      - ./data:/data:ro        # the API only reads the gold files
+    ports:
+      - "8000:8000"            # API docs at http://localhost:8000/docs
+
+  web:
+    build: ./web
+    image: ladewueste-web
+    ports:
+      - "8080:80"
+    depends_on:
+      api:
+        condition: service_healthy
+
+  pipeline:
+    image: ladewueste-api      # same image as the API, different command
+    build: { context: ., dockerfile: docker/api.Dockerfile }
+    profiles: ["pipeline"]     # not started by `docker compose up`
+    command: ["python", "-m", "pipeline.run_all"]
+    volumes:
+      - ./data:/data
