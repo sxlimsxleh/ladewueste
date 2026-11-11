@@ -1,5 +1,5 @@
 # Ladewüste. See CLAUDE.md "Commands".
-.PHONY: setup download pipeline profile types test api web clean
+.PHONY: setup download pipeline profile types test parity api web clean
 
 setup:            ## install Python deps (web deps arrive in milestone 5)
 	uv sync
@@ -27,6 +27,9 @@ test:             ## pytest + dbt tests (needs `make pipeline` once) + TypeScrip
 	uv run pytest -q
 	uv run python -m pipeline.run_dbt test
 	cd web && npm run -s typecheck && npm test --silent
+
+parity:           ## browser coverage (web/src/lib/coverage.ts) == Python planner; needs `make api` running
+	cd web && LADEWUESTE_API_URL=http://127.0.0.1:8000 npx vitest run coverage.parity
 
 api:              ## FastAPI on :8000 (docs at http://localhost:8000/docs)
 	uv run uvicorn api.app.main:app --reload --port 8000
