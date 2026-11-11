@@ -1,5 +1,5 @@
 # Ladewüste. See CLAUDE.md "Commands".
-.PHONY: setup download pipeline profile types test parity api web clean
+.PHONY: setup download pipeline profile types test lint parity api web docker-pipeline up clean
 
 setup:            ## install Python deps (web deps arrive in milestone 5)
 	uv sync
@@ -9,12 +9,7 @@ download:         ## fetch the register CSV (CC BY 4.0) + Germany boundary into 
 	uv run python -m pipeline.download
 
 pipeline:         ## raw CSV -> bronze -> mess report -> dbt build (models + tests) -> gold parquet + quality_report.json
-	@ls data/raw/Ladesaeulenregister*.csv >/dev/null 2>&1 || $(MAKE) download
-	uv run python -m pipeline.load_bronze
-	uv run python -m pipeline.profile
-	uv run python -m pipeline.run_dbt build
-	uv run python -m pipeline.export
-	uv run python -m pipeline.report
+	uv run python -m pipeline.run_all
 
 profile:          ## regenerate docs/mess_report.md from the existing bronze table
 	uv run python -m pipeline.profile
@@ -24,9 +19,20 @@ types:            ## FastAPI models -> api/openapi.json -> web/src/lib/api-types
 	cd web && npm run -s types
 
 test:             ## pytest + dbt tests (needs `make pipeline` once) + TypeScript typecheck
+	uv run ruff check .
 	uv run pytest -q
 	uv run python -m pipeline.run_dbt test
-	cd web && npm run -s typecheck && npm test --silent
+	cd web && npm run -s lint && npm run -s typecheck && npm test --silent
+
+lint:             ## ruff + eslint
+	uv run ruff check .
+	cd web && npm run -s lint
+
+docker-pipeline:  ## build ./data inside Docker (downloads the register if needed)
+	docker compose --profile pipeline run --rm pipeline
+
+up:               ## run API + web in Docker: http://localhost:8080
+	docker compose up --build
 
 parity:           ## browser coverage (web/src/lib/coverage.ts) == Python planner; needs `make api` running
 	cd web && LADEWUESTE_API_URL=http://127.0.0.1:8000 npx vitest run coverage.parity

@@ -154,6 +154,7 @@ def operator_merges(con: duckdb.DuckDBPyConnection) -> list[dict[str, Any]]:
 
 def write_merge_review(merges: list[dict[str, Any]]) -> None:
     """docs/operator_merge_review.csv: the same merges as a reviewable, committed file."""
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
     path = DOCS_DIR / "operator_merge_review.csv"
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
@@ -167,7 +168,7 @@ def write_merge_review(merges: list[dict[str, Any]]) -> None:
 def build_report() -> dict[str, Any]:
     config = load_config()
     source = json.loads(MANIFEST_PATH.read_text(encoding="utf-8")) if MANIFEST_PATH.exists() else {}
-    con = duckdb.connect(str(DUCKDB_PATH), read_only=True)
+    con = duckdb.connect(str(DUCKDB_PATH))  # same mode as dbt: run_all keeps dbt's connection open in-process
     report = {
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "source": {

@@ -1,0 +1,12 @@
+.git
+.github
+.venv
+**/__pycache__
+**/.pytest_cache
+data/raw
+data/gold
+data/*.duckdb*
+pipeline/dbt/target
+pipeline/dbt/logs
+web
+docs

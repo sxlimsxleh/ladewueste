@@ -20,6 +20,7 @@ dependencies = [
 dev = [
     "httpx>=0.28.1",
     "pytest>=8.0",
+    "ruff>=0.17.4",
 ]
 
 [tool.uv]
@@ -28,3 +29,8 @@ package = false
 [tool.pytest.ini_options]
 testpaths = ["pipeline/tests", "api/tests"]
 filterwarnings = ["ignore::DeprecationWarning:fastapi.testclient", "ignore:Using `httpx` with `starlette.testclient`"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+extend-exclude = ["pipeline/dbt/target"]

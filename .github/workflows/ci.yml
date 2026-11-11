@@ -1,0 +1,79 @@
+# Every push to main and every pull request. Needs no secrets and no download:
+# Python and API tests use synthetic data, the pipeline runs on a synthetic register fixture.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python lint + tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.11.32"
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      # Includes the API tests and the check that api/openapi.json matches the code.
+      - run: uv run pytest -q
+
+  pipeline:
+    name: Pipeline + dbt tests (synthetic register)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.11.32"
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: Fixture matches its generator
+        run: |
+          uv run python -m pipeline.tests.fixtures.make_register_fixture
+          git diff --exit-code pipeline/tests/fixtures/register_fixture.csv
+      - name: Run the whole pipeline on the fixture (bronze -> dbt build + tests -> gold -> report)
+        run: |
+          echo "LADEWUESTE_DATA_DIR=$RUNNER_TEMP/data" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/data/raw"
+          cp pipeline/tests/fixtures/register_fixture.csv "$RUNNER_TEMP/data/raw/Ladesaeulenregister_fixture.csv"
+      - run: uv run python -m pipeline.run_all --no-download
+
+  web:
+    name: Web lint, typecheck, tests, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npx vite build
+
+  docker:
+    name: Docker images build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f docker/api.Dockerfile -t ladewueste-api .
+      - run: docker build -t ladewueste-web web
