@@ -114,6 +114,10 @@ def test_quality_report(client: TestClient) -> None:
     body = client.get("/quality").json()
     assert body["funnel"]["stations_usable"] == 3
     assert body["rules"][0]["examples"][0]["after"] == "duplicate_of 2"
+    reasons = body["funnel"]["excluded_by_reason"]
+    assert sum(r["count"] for r in reasons) == body["funnel"]["stations"] - body["funnel"]["stations_usable"]
+    assert [m["kind"] for m in body["operator_merges"]] == ["automatic", "suggested"]
+    assert body["operator_merges"][1]["applied"] is False
 
 
 def test_missing_gold_data_gives_503(tmp_path: Path) -> None:

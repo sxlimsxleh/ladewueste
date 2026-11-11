@@ -79,6 +79,36 @@
         "title": "ErrorResponse",
         "type": "object"
       },
+      "ExclusionReason": {
+        "properties": {
+          "count": {
+            "description": "Stations excluded for this reason (each station counted once).",
+            "title": "Count",
+            "type": "integer"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "reason_id": {
+            "enum": [
+              "placeholder",
+              "outside",
+              "whole_degree",
+              "duplicate"
+            ],
+            "title": "Reason Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason_id",
+          "label",
+          "count"
+        ],
+        "title": "ExclusionReason",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -268,6 +298,76 @@
         "title": "Operator",
         "type": "object"
       },
+      "OperatorMerge": {
+        "properties": {
+          "applied": {
+            "description": "Automatic merges always; suggested ones once approved in the seed file.",
+            "title": "Applied",
+            "type": "boolean"
+          },
+          "from_name": {
+            "title": "From Name",
+            "type": "string"
+          },
+          "from_records": {
+            "title": "From Records",
+            "type": "integer"
+          },
+          "kind": {
+            "description": "automatic = R07 spelling, suggested = R08 review.",
+            "enum": [
+              "automatic",
+              "suggested"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "reason": {
+            "description": "spelling, legal_form or fuzzy",
+            "title": "Reason",
+            "type": "string"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Similarity score for suggested merges (0-100).",
+            "title": "Score"
+          },
+          "to_name": {
+            "title": "To Name",
+            "type": "string"
+          },
+          "to_records": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "To Records"
+          }
+        },
+        "required": [
+          "kind",
+          "from_name",
+          "from_records",
+          "to_name",
+          "to_records",
+          "reason",
+          "score",
+          "applied"
+        ],
+        "title": "OperatorMerge",
+        "type": "object"
+      },
       "PlanResponse": {
         "properties": {
           "desert_km2_after": {
@@ -418,6 +518,14 @@
             "title": "Charging Points Usable",
             "type": "integer"
           },
+          "excluded_by_reason": {
+            "description": "Why stations are not usable for coverage.",
+            "items": {
+              "$ref": "#/components/schemas/ExclusionReason"
+            },
+            "title": "Excluded By Reason",
+            "type": "array"
+          },
           "hpc_points_usable": {
             "title": "Hpc Points Usable",
             "type": "integer"
@@ -456,7 +564,8 @@
           "operators_canonical",
           "charging_points",
           "charging_points_usable",
-          "hpc_points_usable"
+          "hpc_points_usable",
+          "excluded_by_reason"
         ],
         "title": "QualityFunnel",
         "type": "object"
@@ -470,6 +579,13 @@
             "format": "date-time",
             "title": "Generated At",
             "type": "string"
+          },
+          "operator_merges": {
+            "items": {
+              "$ref": "#/components/schemas/OperatorMerge"
+            },
+            "title": "Operator Merges",
+            "type": "array"
           },
           "rules": {
             "items": {
@@ -486,7 +602,8 @@
           "generated_at",
           "source",
           "funnel",
-          "rules"
+          "rules",
+          "operator_merges"
         ],
         "title": "QualityReport",
         "type": "object"

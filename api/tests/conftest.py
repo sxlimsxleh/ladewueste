@@ -90,13 +90,25 @@ def write_gold(gold: Path) -> None:
         "source": {"file": "test.csv", "sha256": "abc", "licence": "CC BY 4.0", "attribution": "Bundesnetzagentur.de"},
         "funnel": {"raw_records": 4, "stations": 4, "stations_usable": 3, "stations_duplicate": 1,
                    "operators_as_registered": 3, "operators_canonical": 2, "charging_points": 4,
-                   "charging_points_usable": 3, "hpc_points_usable": 2},
+                   "charging_points_usable": 3, "hpc_points_usable": 2,
+                   "excluded_by_reason": [
+                       {"reason_id": "placeholder", "label": "Placeholder coordinate (R10)", "count": 0},
+                       {"reason_id": "outside", "label": "Outside Germany or missing (R09)", "count": 0},
+                       {"reason_id": "whole_degree", "label": "Whole-degree coordinates (R11)", "count": 0},
+                       {"reason_id": "duplicate", "label": "Duplicate record (R13)", "count": 1},
+                   ]},
         "rules": [{
             "rule_id": "R13", "title": "Duplicate records", "why": "Counted twice otherwise.", "model": "r13_duplicates",
             "rows_affected": 1, "finding_rows": 1, "actions": {"flagged": 1},
             "examples": [{"station_id": "4", "point_no": None, "action": "flagged",
                           "before": "station 4", "after": "duplicate_of 2"}],
         }],
+        "operator_merges": [
+            {"kind": "automatic", "from_name": "ENBW", "from_records": 1, "to_name": "EnBW", "to_records": None,
+             "reason": "spelling", "score": None, "applied": True},
+            {"kind": "suggested", "from_name": "Tesla GmbH", "from_records": 1, "to_name": "Tesla", "to_records": 1,
+             "reason": "legal_form", "score": 100, "applied": False},
+        ],
     }
     (gold / "quality_report.json").write_text(json.dumps(report), encoding="utf-8")
 
