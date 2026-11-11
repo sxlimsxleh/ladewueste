@@ -91,3 +91,12 @@ Each entry: the decision, the alternative we rejected, and where the AI's first 
 ## M5 · Dev setup
 - **Decision:** the browser calls `/api/...`; Vite proxies it to FastAPI. Only port 5173 needs to be open, which is what makes Codespaces work. `allowedHosts: [".app.github.dev"]` because Vite rejects unknown Host headers by default.
 - **Bug found by screenshot, not by tests:** MapLibre's CSS sets `.maplibregl-map { position: relative }`, which silently overrode `absolute inset-0`: the map was 300 px tall and hidden behind the panel. Fixed with a wrapper div. Typecheck and unit tests were green the whole time.
+
+## M6 · Play mode: one coverage rule in two languages
+- **Decision:** `web/src/lib/coverage.ts` reimplements the planner's rule in the browser: h3-js `gridDisk` only *finds candidates* (enough rings for the radius, spacing taken 20% below average, plus one ring of margin); `greatCircleDistance <= radius` *decides*. Coverage is recomputed from scratch on every change (10 sites x ~130 candidate cells), which makes undo a one-liner and keeps state minimal.
+- **Proof of fairness:** `coverage.parity.test.ts` (`make parity`, needs the API) runs the algorithm's 10 picks through the browser code and compares with `/plan`: every pick's km² matches to 3 decimals. A unit test also compares `coveredBy` against brute force over a whole board, so the gridDisk shortcut never misses a cell.
+- **Rejected:** plain `gridDisk(k)` rings (approximates a circle; the scores would disagree); asking the API on every click (not instant, and the game would depend on network latency).
+- **Score:** you vs the algorithm's first *k* picks, where *k* = your number of sites, so 3 sites are compared with 3 sites. The greedy plan's first *k* picks are themselves the greedy plan for *k*, so this is the fair comparison.
+- **Play mode stays on res 6** and turns the map into a flat board: covered cells fade back, deserts stay sand, covered deserts turn green.
+- **Keyboard:** P toggles play mode, Enter drops a site at the crosshair (the map centre; arrow keys pan), Backspace undoes. All are ignored while typing in a field or focused on a button.
+- **Where the AI was wrong:** the parity test first failed on `fetch` because Node resolves `localhost` to IPv6 `::1` while uvicorn listens on `127.0.0.1`; not a coverage bug, but it looked like one for a minute.
