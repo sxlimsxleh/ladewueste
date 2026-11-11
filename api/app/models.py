@@ -104,6 +104,12 @@ class QualitySource(BaseModel):
     attribution: str
 
 
+class ExclusionReason(BaseModel):
+    reason_id: Literal["placeholder", "outside", "whole_degree", "duplicate"]
+    label: str
+    count: int = Field(description="Stations excluded for this reason (each station counted once).")
+
+
 class QualityFunnel(BaseModel):
     raw_records: int
     stations: int
@@ -114,6 +120,7 @@ class QualityFunnel(BaseModel):
     charging_points: int
     charging_points_usable: int
     hpc_points_usable: int
+    excluded_by_reason: list[ExclusionReason] = Field(description="Why stations are not usable for coverage.")
 
 
 Action = Literal["fixed", "flagged", "accepted"]
@@ -138,11 +145,23 @@ class QualityRule(BaseModel):
     examples: list[QualityExample]
 
 
+class OperatorMerge(BaseModel):
+    kind: Literal["automatic", "suggested"] = Field(description="automatic = R07 spelling, suggested = R08 review.")
+    from_name: str
+    from_records: int
+    to_name: str
+    to_records: int | None
+    reason: str = Field(description="spelling, legal_form or fuzzy")
+    score: int | None = Field(description="Similarity score for suggested merges (0-100).")
+    applied: bool = Field(description="Automatic merges always; suggested ones once approved in the seed file.")
+
+
 class QualityReport(BaseModel):
     generated_at: datetime
     source: QualitySource
     funnel: QualityFunnel
     rules: list[QualityRule]
+    operator_merges: list[OperatorMerge]
 
 
 class ErrorResponse(BaseModel):

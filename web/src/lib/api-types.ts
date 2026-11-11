@@ -151,6 +151,21 @@ export interface components {
             /** Detail */
             detail: string;
         };
+        /** ExclusionReason */
+        ExclusionReason: {
+            /**
+             * Count
+             * @description Stations excluded for this reason (each station counted once).
+             */
+            count: number;
+            /** Label */
+            label: string;
+            /**
+             * Reason Id
+             * @enum {string}
+             */
+            reason_id: "placeholder" | "outside" | "whole_degree" | "duplicate";
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -236,6 +251,38 @@ export interface components {
             /** Operator */
             operator: string;
         };
+        /** OperatorMerge */
+        OperatorMerge: {
+            /**
+             * Applied
+             * @description Automatic merges always; suggested ones once approved in the seed file.
+             */
+            applied: boolean;
+            /** From Name */
+            from_name: string;
+            /** From Records */
+            from_records: number;
+            /**
+             * Kind
+             * @description automatic = R07 spelling, suggested = R08 review.
+             * @enum {string}
+             */
+            kind: "automatic" | "suggested";
+            /**
+             * Reason
+             * @description spelling, legal_form or fuzzy
+             */
+            reason: string;
+            /**
+             * Score
+             * @description Similarity score for suggested merges (0-100).
+             */
+            score: number | null;
+            /** To Name */
+            to_name: string;
+            /** To Records */
+            to_records: number | null;
+        };
         /** PlanResponse */
         PlanResponse: {
             /** Desert Km2 After */
@@ -286,6 +333,11 @@ export interface components {
             charging_points: number;
             /** Charging Points Usable */
             charging_points_usable: number;
+            /**
+             * Excluded By Reason
+             * @description Why stations are not usable for coverage.
+             */
+            excluded_by_reason: components["schemas"]["ExclusionReason"][];
             /** Hpc Points Usable */
             hpc_points_usable: number;
             /** Operators As Registered */
@@ -309,6 +361,8 @@ export interface components {
              * Format: date-time
              */
             generated_at: string;
+            /** Operator Merges */
+            operator_merges: components["schemas"]["OperatorMerge"][];
             /** Rules */
             rules: components["schemas"]["QualityRule"][];
             source: components["schemas"]["QualitySource"];

@@ -389,7 +389,7 @@ export function DesertMap() {
       )}
 
       {noMatches && (
-        <div role="status" className="absolute left-1/2 top-3 z-20 -translate-x-1/2 rounded-lg border border-line bg-panel px-4 py-2 text-sm backdrop-blur-md">
+        <div role="status" className="absolute left-1/2 top-16 z-20 -translate-x-1/2 rounded-lg border border-line bg-panel px-4 py-2 text-sm backdrop-blur-md">
           No charging points match these filters.
         </div>
       )}
