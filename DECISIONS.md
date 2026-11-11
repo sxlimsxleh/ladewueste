@@ -75,3 +75,19 @@ Each entry: the decision, the alternative we rejected, and where the AI's first 
 - **Checked:** the generated types reject a missing `res`, a string `min_kw` and a misspelt response field at compile time.
 - **Tooling:** TypeScript pinned to 5.9.3, not the new 7.0: openapi-typescript declares `typescript ^5.x`, typescript-eslint supports `< 6.1`.
 - **API tests** run on a 3-cell synthetic gold folder built in `conftest.py`, so CI needs no 55 MB download.
+
+## M5 · Map stack and versions
+- **Decision:** MapLibre + deck.gl `MapboxOverlay` in *interleaved* mode: hexes are drawn into MapLibre's own WebGL context, so they share the camera and depth buffer with the basemap. No react-map-gl wrapper: one `useEffect` creates the map, another pushes new layers.
+- **Where the AI was wrong (twice):** it first installed the newest MapLibre (6.17). Vite's pre-bundling broke MapLibre 6's separate worker file, and after working around that, deck.gl 9.4's interleaved mode crashed reading `map.transform._nearZ` (renamed in MapLibre 6). deck.gl 9.4 is built against MapLibre 5, so MapLibre is pinned to **5.24.0**. Lesson: "latest" of two libraries that touch each other's internals is not a version strategy.
+- **Basemap:** OpenFreeMap "dark" (no key, free including commercial use, OSM data). Rejected: CARTO Dark Matter (free tier excludes commercial use, which matters for a customer pitch).
+- **npm audit:** two advisories (`fflate`, `image-size`) come only through deck.gl's 3D-tiles/glTF loaders; the app never loads ZIP or ICNS files through them.
+
+## M5 · Visual encoding
+- **Height** = HPC kW in the cell on a square-root scale (250 m per sqrt(kW)): the busiest cell has 35 MW, the median HPC cell 1.6 MW; linear heights would show Berlin and Munich and nothing else.
+- **Height vs zoom:** metres grow on screen with every zoom level, so columns that read well over Germany became a wall over Berlin. `elevationScaleForZoom` = 2^(baseZoom - zoom) keeps columns about the same screen height; at station zoom the hexes lie flat and fade so station dots stay readable.
+- **Colour** = distance to the nearest hub, teal (0 km) -> indigo (25 km); deserts in sand. Cool covered cells vs a single warm desert colour makes the answer to "where?" visible at a glance.
+- **Filters never recolour deserts** (same rule as the API) and the panel says so in one line.
+
+## M5 · Dev setup
+- **Decision:** the browser calls `/api/...`; Vite proxies it to FastAPI. Only port 5173 needs to be open, which is what makes Codespaces work. `allowedHosts: [".app.github.dev"]` because Vite rejects unknown Host headers by default.
+- **Bug found by screenshot, not by tests:** MapLibre's CSS sets `.maplibregl-map { position: relative }`, which silently overrode `absolute inset-0`: the map was 300 px tall and hidden behind the panel. Fixed with a wrapper div. Typecheck and unit tests were green the whole time.

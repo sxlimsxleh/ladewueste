@@ -11,6 +11,7 @@ import pandas as pd
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import RedirectResponse
 
 from api.app.db import DataNotReady, GoldStore, gold_dir_from_env
 from api.app.models import (
@@ -89,6 +90,11 @@ BBOX_DESCRIPTION = "min_lon,min_lat,max_lon,max_lat (WGS84), e.g. 13.0,52.3,13.8
 
 
 def register_routes(app: FastAPI) -> None:
+    @app.get("/", include_in_schema=False)
+    def root() -> RedirectResponse:
+        """The API has no page of its own: send browsers to the interactive docs."""
+        return RedirectResponse(url="/docs")
+
     @app.get("/config", response_model=AppConfig, tags=["meta"])
     def get_config() -> AppConfig:
         config = load_config()

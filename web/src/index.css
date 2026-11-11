@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+/* Design tokens (dark only: the product is a night map). Used as bg-panel, text-muted, ... */
+@theme {
+  --color-ink: #0b0f14;          /* page and map background */
+  --color-panel: rgb(17 22 30 / 0.86);
+  --color-panel-solid: #11161e;
+  --color-line: rgb(148 163 184 / 0.16);
+  --color-fg: #e6edf3;
+  --color-muted: #8b98a8;
+  --color-sand: #e8be78;         /* deserts: must match SAND in lib/scales.ts */
+  --color-teal: #5eead4;
+  --color-accent: #38bdf8;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible keyboard focus everywhere, never on mouse click. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* MapLibre's attribution control, restyled for the dark UI. */
+.maplibregl-ctrl-attrib {
+  background: rgb(11 15 20 / 0.7) !important;
+  color: var(--color-muted);
+  font-size: 11px;
+}
+.maplibregl-ctrl-attrib a {
+  color: var(--color-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
