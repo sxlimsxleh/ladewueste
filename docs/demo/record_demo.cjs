@@ -73,7 +73,7 @@ let n = 0;
   // Overlays drawn into the page: captions, title/end cards, a visible cursor with a click ripple.
   async function overlay() {
     await page.addStyleTag({ content: `
-      #demo-caption{position:fixed;left:50%;bottom:58px;transform:translateX(-50%);z-index:9999;max-width:880px;
+      #demo-caption{position:fixed;left:50%;bottom:58px;transform:translateX(-50%);z-index:9999;width:max-content;max-width:1060px;
         padding:12px 22px;border-radius:14px;background:rgba(8,11,16,.88);border:1px solid rgba(232,190,120,.35);
         color:#e6edf3;font:600 21px/1.35 ui-sans-serif,system-ui,sans-serif;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.5)}
       #demo-caption b{color:#e8be78}

@@ -309,9 +309,12 @@ export function DesertMap() {
         <div ref={containerRef} className="h-full w-full" aria-label="Map of Germany's HPC charging coverage" />
       </div>
 
+      {/* Left column: controls on top, legend at the bottom. On short screens (720p laptops) the
+          controls scroll inside the column instead of sliding underneath the legend. */}
+      <div className="pointer-events-none absolute bottom-8 left-3 top-3 z-10 flex w-80 flex-col gap-3">
       <section
         aria-label="Map controls"
-        className="absolute left-3 top-3 z-10 w-80 rounded-xl border border-line bg-panel p-4 shadow-2xl backdrop-blur-md"
+        className="pointer-events-auto min-h-0 shrink overflow-y-auto rounded-xl border border-line bg-panel p-4 shadow-2xl backdrop-blur-md"
       >
         <header>
           <h1 className="text-lg font-semibold tracking-tight">Ladewüste</h1>
@@ -358,8 +361,9 @@ export function DesertMap() {
         )}
       </section>
 
-      <div className="absolute bottom-8 left-3 z-10">
+      <div className="pointer-events-auto mt-auto shrink-0 self-start">
         <Legend radiusKm={radiusKm} showStations={showStations} playing={playing} />
+      </div>
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
