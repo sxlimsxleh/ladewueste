@@ -37,8 +37,10 @@ let n = 0;
   /** The next drawn frame, or the last one if nothing changes on screen within `ms`. */
   const nextFrame = (ms = 4000) => new Promise((resolve) => { waiting.push(resolve); setTimeout(resolve, ms); });
 
+  // A "fresh" shot waits for the screen to settle after a change (caption, click, page switch):
+  // the very next streamed frame can still show the previous state.
   async function shot(seconds, { fresh = true } = {}) {
-    if (fresh || !latest) await nextFrame();
+    if (fresh || !latest) { await nextFrame(); await wait(900); }
     const file = `f${String(++n).padStart(5, "0")}.jpg`;
     fs.writeFileSync(path.join(OUT, file), Buffer.from(latest, "base64"));
     concat.push([file, seconds]);
