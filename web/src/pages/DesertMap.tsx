@@ -27,6 +27,7 @@ import {
 } from "@/lib/scales";
 import type { Site } from "@/lib/coverage";
 import { useMapView } from "@/lib/useMapView";
+import { DEMO } from "@/lib/demo";
 import { usePlayGame } from "@/lib/usePlayGame";
 
 const BASEMAP_STYLE = "https://tiles.openfreemap.org/styles/dark";
@@ -119,7 +120,8 @@ export function DesertMap() {
   const playing = game.active;
 
   // Play mode always uses the map resolution: "a cell" must not change meaning mid-game.
-  const showDetail = !playing && (view?.zoom ?? 0) >= DETAIL_ZOOM;
+  // The static demo has no API to ask for a viewport, so it stays on the map resolution.
+  const showDetail = !DEMO && !playing && (view?.zoom ?? 0) >= DETAIL_ZOOM;
   const detail = useQuery({
     queryKey: ["hexes", resDetail, minKw, operator, view?.bbox],
     queryFn: () => api.hexes({ res: resDetail!, min_kw: minKw, operator, bbox: view!.bbox }),
@@ -127,7 +129,7 @@ export function DesertMap() {
     placeholderData: (previous) => previous,
   });
 
-  const showStations = !playing && (view?.zoom ?? 0) >= STATIONS_ZOOM;
+  const showStations = !DEMO && !playing && (view?.zoom ?? 0) >= STATIONS_ZOOM;
   const stations = useQuery({
     queryKey: ["stations", view?.bbox],
     queryFn: () => api.stations({ bbox: view!.bbox, limit: 3000 }),

@@ -2,6 +2,12 @@
 
 **Deployment memo for Voltbahn GmbH (fictional customer) · data as of 01.09.2026**
 
+**[▶ Live demo](https://sxlimsxleh.github.io/ladewueste/)** (no install) ·
+**[Video, 75 s](docs/demo/ladewueste-demo.mp4)** ·
+**[Demo kit](docs/DEMO.md)** (pitch, walkthrough, questions)
+
+![Ladewüste demo: play mode against the algorithm](docs/demo/ladewueste-demo.gif)
+
 Voltbahn wants to choose its next 20 high-power charging (HPC, ≥ 150 kW) sites. The obvious source is
 the Bundesnetzagentur's public charger register, but Voltbahn's analyst opened it in Excel and gave up.
 This repository turns that register into trustworthy data, a coverage model, and a tool the expansion
@@ -9,6 +15,10 @@ team can actually use: a 3D map of Germany's fast-charging deserts, a play mode 
 sites against an optimisation algorithm, and a Data Doctor page that shows every fix made to the data.
 
 ![Desert map: a desert cell clicked](docs/screenshots/desert-map.png)
+
+The [live demo](https://sxlimsxleh.github.io/ladewueste/) is this web app reading precomputed API
+answers (rebuilt weekly by GitHub Actions). The operator filter and street-level zoom need the full
+app; see [Run it](#4-run-it).
 
 ## 1. The problem in one number
 
