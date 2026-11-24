@@ -3,7 +3,7 @@
 **Deployment memo for Voltbahn GmbH (fictional customer) · data as of 01.09.2026**
 
 **[▶ Live demo](https://sxlimsxleh.github.io/ladewueste/)** (no install) ·
-**[Video, 75 s](docs/demo/ladewueste-demo.mp4)** ·
+**[Video, 45 s](docs/demo/ladewueste-demo.mp4)** ·
 **[Demo kit](docs/DEMO.md)** (pitch, walkthrough, questions)
 
 ![Ladewüste demo: play mode against the algorithm](docs/demo/ladewueste-demo.gif)

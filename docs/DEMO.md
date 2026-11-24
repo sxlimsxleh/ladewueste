@@ -6,7 +6,7 @@ questions with short answers, a fallback plan, and a LinkedIn post draft.
 | | |
 |---|---|
 | **Live demo** (static, no install) | https://sxlimsxleh.github.io/ladewueste/ |
-| **Video** (75 s) | [`docs/demo/ladewueste-demo.mp4`](demo/ladewueste-demo.mp4) |
+| **Video** (45 s) | [`docs/demo/ladewueste-demo.mp4`](demo/ladewueste-demo.mp4) |
 | **Code + deployment memo** | https://github.com/sxlimsxleh/ladewueste |
 
 The live demo is the real web app reading precomputed API answers, rebuilt weekly from the latest
