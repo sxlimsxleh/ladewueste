@@ -1,4 +1,5 @@
-import { Map as MapIcon, Stethoscope } from "lucide-react";
+import { ExternalLink, Map as MapIcon, Stethoscope } from "lucide-react";
+import { DEMO, REPO_URL } from "@/lib/demo";
 import { hrefFor, type Route } from "@/lib/router";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,18 @@ export function TopNav({ current }: { current: Route }) {
           {label}
         </a>
       ))}
+      {DEMO && (
+        <a
+          href={REPO_URL}
+          target="_blank"
+          rel="noreferrer"
+          title="This is a static demo. The full app (operator filter, street-level detail) runs from the repository."
+          className="ml-1 flex items-center gap-1.5 rounded-full border-l border-line px-3 py-1.5 text-xs text-muted hover:text-fg"
+        >
+          <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+          Static demo · Code
+        </a>
+      )}
     </nav>
   );
 }

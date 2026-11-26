@@ -124,3 +124,13 @@ Each entry: the decision, the alternative we rejected, and where the AI's first 
 
 ## M8 · Licence
 - Code under MIT (Selim's choice). Data licences are separate and credited in the README and the UI footer: Bundesnetzagentur CC BY 4.0, Natural Earth public domain, OpenStreetMap ODbL via OpenFreeMap.
+
+## Demo · Static site on GitHub Pages
+- **Decision:** the public demo is the same web app built with `VITE_DEMO=1`: the typed client reads JSON files instead of calling the API. `api/export_demo.py` produces those files *by calling the real FastAPI app in-process*, so the demo shows exactly what the API returns. A GitHub Actions workflow runs the full pipeline, exports, builds and deploys on every push to `main` and weekly; the data is never committed.
+- **Trade-off:** the operator filter and street-level zoom (res-7 hexes, station dots) need live queries; precomputing them would be hundreds of MB, so the demo says "needs the full app" instead. Everything else (map, panel, power filter, play mode, auto-plan, Data Doctor) works.
+- **Rejected:** hosting the API (needs an account, money and someone to keep it running) for a portfolio demo.
+
+## Demo · Video rendered frame by frame
+- **Where the plan was wrong:** a normal screen recording in a GPU-less container stutters at ~5 fps, and Playwright screenshots of the WebGL page took 6–8 s *each*; the first render attempt ran out of time after 368 frames. Measuring showed drawing was cheap (~35 ms) and the *capture* was expensive. Chrome's screencast stream halved the cost; the film was then redesigned around it: 720p, camera moves at 15 captured fps, UI animations as cuts, auto-plan as stop-motion. `docs/demo/record_demo.cjs` + `make_video.sh` regenerate it.
+- **Bug found by the video script:** at 1280x720 the play-mode controls grew under the legend, and the legend blocked clicks on "Your plan / Algorithm" (Playwright refused the click: "subtree intercepts pointer events"). Panel and legend now share one flex column; the panel scrolls inside it on short screens. Checked at 1280x720 and 1440x900.
+- **Second render bug:** the first complete video showed stale frames (no end card; the Data Doctor's first shot still showed the map), because the screencast's next frame could still be the previous state. "Fresh" shots now wait for the screen to settle. The final film is 45 s (1280x720, 7.3 MB) plus a 14 s GIF (1.7 MB).

@@ -8,6 +8,8 @@ const API_TARGET = process.env.LADEWUESTE_API ?? "http://localhost:8000";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // GitHub Pages serves the static demo under /<repo>/; everywhere else the app lives at /.
+  base: process.env.VITE_BASE ?? "/",
   resolve: {
     alias: { "@": new URL("./src", import.meta.url).pathname },
   },

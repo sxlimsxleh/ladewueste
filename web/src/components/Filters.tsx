@@ -6,6 +6,7 @@ import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { api } from "@/lib/api";
+import { DEMO } from "@/lib/demo";
 import { formatCount, POWER_CLASSES, type PowerClassId } from "@/lib/scales";
 
 interface FiltersProps {
@@ -67,6 +68,11 @@ export function Filters({ powerClass, onPowerClassChange, operator, onOperatorCh
         <div id="operator-label" className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-muted">
           Operator
         </div>
+        {DEMO ? (
+          <p className="rounded-md border border-line px-3 py-2 text-xs text-muted">
+            Filtering by operator needs the live API: available when you run the full app.
+          </p>
+        ) : (
         <div className="flex gap-1">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -117,6 +123,7 @@ export function Filters({ powerClass, onPowerClassChange, operator, onOperatorCh
             </Button>
           )}
         </div>
+        )}
       </div>
 
       <p className="text-[11px] leading-snug text-muted">

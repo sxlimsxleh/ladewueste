@@ -27,6 +27,7 @@ import {
 } from "@/lib/scales";
 import type { Site } from "@/lib/coverage";
 import { useMapView } from "@/lib/useMapView";
+import { DEMO } from "@/lib/demo";
 import { usePlayGame } from "@/lib/usePlayGame";
 
 const BASEMAP_STYLE = "https://tiles.openfreemap.org/styles/dark";
@@ -119,7 +120,8 @@ export function DesertMap() {
   const playing = game.active;
 
   // Play mode always uses the map resolution: "a cell" must not change meaning mid-game.
-  const showDetail = !playing && (view?.zoom ?? 0) >= DETAIL_ZOOM;
+  // The static demo has no API to ask for a viewport, so it stays on the map resolution.
+  const showDetail = !DEMO && !playing && (view?.zoom ?? 0) >= DETAIL_ZOOM;
   const detail = useQuery({
     queryKey: ["hexes", resDetail, minKw, operator, view?.bbox],
     queryFn: () => api.hexes({ res: resDetail!, min_kw: minKw, operator, bbox: view!.bbox }),
@@ -127,7 +129,7 @@ export function DesertMap() {
     placeholderData: (previous) => previous,
   });
 
-  const showStations = !playing && (view?.zoom ?? 0) >= STATIONS_ZOOM;
+  const showStations = !DEMO && !playing && (view?.zoom ?? 0) >= STATIONS_ZOOM;
   const stations = useQuery({
     queryKey: ["stations", view?.bbox],
     queryFn: () => api.stations({ bbox: view!.bbox, limit: 3000 }),
@@ -307,9 +309,12 @@ export function DesertMap() {
         <div ref={containerRef} className="h-full w-full" aria-label="Map of Germany's HPC charging coverage" />
       </div>
 
+      {/* Left column: controls on top, legend at the bottom. On short screens (720p laptops) the
+          controls scroll inside the column instead of sliding underneath the legend. */}
+      <div className="pointer-events-none absolute bottom-8 left-3 top-3 z-10 flex w-80 flex-col gap-3">
       <section
         aria-label="Map controls"
-        className="absolute left-3 top-3 z-10 w-80 rounded-xl border border-line bg-panel p-4 shadow-2xl backdrop-blur-md"
+        className="pointer-events-auto min-h-0 shrink overflow-y-auto rounded-xl border border-line bg-panel p-4 shadow-2xl backdrop-blur-md"
       >
         <header>
           <h1 className="text-lg font-semibold tracking-tight">Ladewüste</h1>
@@ -356,8 +361,9 @@ export function DesertMap() {
         )}
       </section>
 
-      <div className="absolute bottom-8 left-3 z-10">
+      <div className="pointer-events-auto mt-auto shrink-0 self-start">
         <Legend radiusKm={radiusKm} showStations={showStations} playing={playing} />
+      </div>
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
