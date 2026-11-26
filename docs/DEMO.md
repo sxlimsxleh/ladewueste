@@ -13,6 +13,11 @@ The live demo is the real web app reading precomputed API answers, rebuilt weekl
 register. Two things need the full app (`make pipeline && make api && make web`, or Docker): the
 operator filter and street-level zoom with station dots.
 
+**About the numbers:** everything quoted below, in the README and in the video comes from the
+01.09.2026 release (19,318 km² of desert). The live demo rebuilds weekly from the newest register,
+so it shows newer figures (for example 16,695 km² in late November 2026). Say the number on screen,
+and if someone asks: "it refreshes itself weekly, and the desert is shrinking as hubs open."
+
 ## The 30-second pitch
 
 > Germany publishes a register of every public charging station: 116,000 records, as a CSV that
@@ -23,7 +28,8 @@ operator filter and street-level zoom with station dots.
 
 ## The 3-minute walkthrough (live demo)
 
-1. **The number (0:00).** Point at **19,318 km²**. "Sand means more than 25 km from a hub: a site
+1. **The number (0:00).** Point at the big number (19,318 km² in the 01.09.2026 release; the live
+   demo may show a newer figure). "Sand means more than 25 km from a hub: a site
    with at least six chargers of 150 kW or more."
 2. **The decision behind it (0:30).** Click a sand cell around Salzwedel (north-east of Wolfsburg):
    some of them have several fast chargers and one 2 km away, yet they are deserts. "If one charger counted, Germany would have
@@ -105,8 +111,9 @@ is public domain, the basemap is OpenStreetMap via OpenFreeMap. The raw file is 
 > - a game: drop your own fast-charging hubs and race a greedy optimisation algorithm
 >
 > The most interesting part wasn't code. Counting any single fast charger as coverage, Germany has
-> almost no gaps left. Counting real hubs (6+ chargers at one site), **19,318 km²** is more than
-> 25 km from one. The definition was the decision.
+> almost no gaps left. Counting real hubs (6+ chargers at one site), **19,318 km²** was more than
+> 25 km from one in the September 2026 register. The definition was the decision. The live map
+> rebuilds itself every week from the newest data.
 >
 > 🔗 Try it (no install): https://sxlimsxleh.github.io/ladewueste/
 > 💻 Code and design decisions: https://github.com/sxlimsxleh/ladewueste

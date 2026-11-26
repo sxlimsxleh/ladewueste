@@ -20,6 +20,10 @@ The [live demo](https://sxlimsxleh.github.io/ladewueste/) is this web app readin
 answers (rebuilt weekly by GitHub Actions). The operator filter and street-level zoom need the full
 app; see [Run it](#4-run-it).
 
+> **Numbers in this README, the screenshots and the video come from the 01.09.2026 release.** The live
+> demo rebuilds itself weekly from the newest register, so it shows newer figures (for example a
+> smaller desert area as new hubs open). That difference is the refresh working, not an error.
+
 ## 1. The problem in one number
 
 **19,318 km², 5.4 % of Germany, is more than 25 km from an HPC hub.** A hub is a site with at least
