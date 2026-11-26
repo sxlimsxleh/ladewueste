@@ -13,8 +13,13 @@ export function DesertCounter({ game }: { game: PlayGame }) {
     <div>
       <div className="text-[11px] font-medium uppercase tracking-wider text-muted">Desert area · {planLabel}</div>
       <div className="mt-1 flex items-baseline gap-2 whitespace-nowrap tabular-nums">
-        <span className="text-sm text-muted line-through decoration-muted/60">{formatKm2(game.desertKm2)}</span>
-        <ArrowRight className="h-3.5 w-3.5 self-center text-muted" aria-hidden />
+        {/* "before -> after" only once something changed; with no sites it would read "X -> X". */}
+        {game.shownSites.length > 0 && (
+          <>
+            <span className="text-sm text-muted line-through decoration-muted/60">{formatKm2(game.desertKm2)}</span>
+            <ArrowRight className="h-3.5 w-3.5 self-center text-muted" aria-hidden />
+          </>
+        )}
         <span className="text-3xl font-semibold text-sand">{formatKm2(remaining)}</span>
       </div>
       <div className="mt-1 text-xs text-muted" aria-live="polite">

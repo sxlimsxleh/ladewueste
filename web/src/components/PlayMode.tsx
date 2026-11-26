@@ -23,7 +23,9 @@ export function PlaySwitch({ game }: { game: PlayGame }) {
         <kbd className="rounded border border-line px-1 text-[10px] font-normal text-muted">P</kbd>
       </span>
       <span className={cn("relative h-5 w-9 rounded-full transition-colors", game.active ? "bg-emerald-400" : "bg-white/15")} aria-hidden>
-        <span className={cn("absolute top-0.5 h-4 w-4 rounded-full bg-white transition-transform", game.active ? "translate-x-4" : "translate-x-0.5")} />
+        {/* Knob pinned at left-0.5 (2 px) and slid by exactly track width - knob - 2 x 2 px = 16 px,
+            so it never leaves the track, whatever the browser's default position would have been. */}
+        <span className={cn("absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform", game.active ? "translate-x-4" : "translate-x-0")} />
       </span>
     </button>
   );
